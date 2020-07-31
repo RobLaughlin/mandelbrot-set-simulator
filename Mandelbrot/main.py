@@ -23,14 +23,24 @@ def hsv_to_rgb(hues):
 
     return color_space
 
-"""
-Generates a best estimate of the Mandelbrot Set given a limit
-on recursion iterations and a point of divergence (Most commonly a radius of 2)
-"""
+
 class Mandelbrot:
-    def __init__(self, recursionLimit=255, divergentPoint=2):
-        self.recursionLimit = recursionLimit
-        self.divergentPoint = divergentPoint
+    """
+    Generates a best estimate of the Mandelbrot Set given a limit placed on recursion iterations
+    """
+
+    def __init__(self, iterations:int=255):
+        assert is iterations 
+        self.iterations = iterations
+
+    def get_iterations(self):
+        return self.iterations
+    
+    def set_iterations(self, iterations):
+        self.iterations = iterations
+    
+    def generate_set(self, ):
+        coordinate_space = CoordinateSpace(x_min=-2, x_max=2, y_min=-2, y_max=2)
 
     """
     Performs the same operation as converting complex co-ordinates into
@@ -173,7 +183,6 @@ def save_image(fileName):
     plt.savefig(fileName, bbox_inches = 'tight', pad_inches = 0)
 
 def init():
-    coordinate_space = CoordinateSpace(x_min=-2, x_max=2, y_min=-2, y_max=2)
     viewer = Mandelbrot_Viewer(recursionLimit=1000, divergentPoint=2, width=600, height=600, zoom=0.25, coords=coordinate_space)
     viewer.axes.set_axis_off()
     viewer.show_image()
