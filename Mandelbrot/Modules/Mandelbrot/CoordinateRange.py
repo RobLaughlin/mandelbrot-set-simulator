@@ -1,7 +1,7 @@
-class InvalidCoordinateBounds(Exception):
-    pass
-
 class CoordinateRange(object):
+    class InvalidCoordinateBounds(Exception):
+        pass
+
     def __init__(self, minX:float, maxX:float, minY:float, maxY:float):
         """
         Sets a strict boundary between x and y values.
@@ -17,7 +17,7 @@ class CoordinateRange(object):
     
     def set_xRange(self, min_x:float, max_x:float):
         if min_x >= max_x:
-            raise InvalidCoordinateBounds('The maximum x value must be strictly greater than the minimum x value.')
+            raise CoordinateRange.InvalidCoordinateBounds('The maximum x value must be strictly greater than the minimum x value.')
 
         self.xRange = (min_x, max_x)
     
@@ -26,7 +26,7 @@ class CoordinateRange(object):
     
     def set_yRange(self, min_y:float, max_y:float):
         if min_y >= max_y:
-            raise InvalidCoordinateBounds('The maximum y value must be strictly greater than the minimum y value.')
+            raise CoordinateRange.InvalidCoordinateBounds('The maximum y value must be strictly greater than the minimum y value.')
 
         self.yRange = (min_y, max_y)
     
