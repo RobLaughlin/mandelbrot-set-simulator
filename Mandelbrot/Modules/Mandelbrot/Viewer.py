@@ -1,8 +1,7 @@
-from .CoordinateRange import CoordinateRange
-from .Mandelbrot import Mandelbrot
+from . import Set, CoordinateRange
 from matplotlib import pyplot as plt
 
-class MandelbrotViewer(Mandelbrot):
+class Viewer(Set):
     def __init__(self, iterations:int, coord_range:CoordinateRange, figsize=(8,8), dpi=100):
         """
         GUI inherited class of the Mandelbrot set. 

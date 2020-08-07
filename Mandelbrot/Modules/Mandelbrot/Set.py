@@ -1,7 +1,7 @@
 from .CoordinateRange import CoordinateRange
 import numpy as np
 
-class Mandelbrot(object):
+class Set(object):
     """
     Generates a best estimate of the Mandelbrot Set given a limit placed on recursion iterations
     """
