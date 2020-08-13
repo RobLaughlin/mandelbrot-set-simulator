@@ -12,8 +12,10 @@ class Set(object):
     def __init__(self, iterations:int, coord_range:CoordinateRange):
         self.set = None
         self.set_template = None
-        self.iterations = iterations
-        self.coord_range = coord_range 
+        self.max_iterations = iterations
+        self.coord_range = coord_range
+
+        self.current_iteration = 0
 
     def generate_template(self, xVals:int, yVals:int):
         """
@@ -63,12 +65,12 @@ class Set(object):
         self.coord_range = coord_range
 
     def get_iterations(self):
-        return self.iterations
+        return self.max_iterations
     
     def set_iterations(self, iterations:int):
-        self.iterations = iterations
+        self.max_iterations = iterations
     
-    def generate_set(self, xVals:int=None, yVals:int=None):
+    def set_generator(self, xVals:int=None, yVals:int=None):
         """
         Start the iterative process of generating the Mandelbrot Set.
         """
@@ -84,12 +86,18 @@ class Set(object):
         Z = np.zeros_like(self.set_template)
         Z_Mask = np.ones_like(self.set_template, dtype=bool)
         
-        for i in range(self.iterations):
+        for i in range(self.max_iterations):
             # The standard equation for the Mandelbrot Set
             Z['point'][Z_Mask] = Z['point'][Z_Mask]**2 + self.set_template['point'][Z_Mask]
 
             divergence_mask = np.logical_and(np.absolute(Z['point']) > 2, Z_Mask)
             Z['divergence'][divergence_mask] = i
             Z_Mask = np.logical_and(Z_Mask, np.logical_not(divergence_mask))
-        
-        self.set = Z
+            yield (Z, i)
+    
+    def generate_set(self, xVals:int=None, yVals:int=None):
+        mset = self.set_generator(xVals, yVals)
+
+        for i in mset:
+            self.set = i[0]
+            self.current_iteration = i[1]
