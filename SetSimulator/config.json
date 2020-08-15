@@ -1,0 +1,25 @@
+{
+    "defaults": {
+        "set":
+        {
+            "maxIterations": 200,
+            "xRange": {
+                "min": -2,
+                "max": 2
+            },
+            "yRange": {
+                "min": -2,
+                "max": 2
+            }
+        },
+        "viewer": {
+            "title": "Set Simulator",
+            "colormap": "hot",
+            "saveIcon": "img/save.gif",
+            "dimensions": {
+                "width": 600,
+                "height": 600
+            }
+        }
+    }
+}

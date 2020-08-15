@@ -1,20 +1,20 @@
 from .CoordinateRange import CoordinateRange
 import numpy as np
+from abc import ABC, abstractmethod
 
-class Set(object):
-    """
-    Generates a best estimate of the Mandelbrot Set given a limit placed on recursion iterations
-    """
-
+class ComplexSet(ABC):
     class TemplateNotGenerated(Exception):
         pass
 
-    def __init__(self, iterations:int, coord_range:CoordinateRange):
+    def __init__(self, iterations:int, coord_range:CoordinateRange, name='Generic'):
         self.set = None
         self.set_template = None
-        self.max_iterations = iterations
+        self.xVals = None
+        self.yVals = None
+        
         self.coord_range = coord_range
-
+        self.max_iterations = iterations
+        self.name = name
         self.current_iteration = 0
 
     def generate_template(self, xVals:int, yVals:int):
@@ -22,11 +22,11 @@ class Set(object):
         Takes in a number of x values and corresponding y values
         to generate a grid of complex numbers ready to be calculated.
         This is commonly used with a type of data viewer to create
-        pixel points of the mandelbrot set.
+        pixel points of the set.
 
         ex: generate_template(1920, 1080) 
         outputs a 2D list of complex points and their divergence point
-        during the iterative process of the Mandelbrot set calculation.
+        during the iterative process of the set calculation.
         """
 
         xRange = self.coord_range.get_xRange()
@@ -45,7 +45,18 @@ class Set(object):
 
         # Use this complex grid template before generating the Mandelbrot Set.
         self.set_template = complex_grid
+        self.xVals = xVals
+        self.yVals = yVals
 
+    def get_template(self):
+        return self.set_template
+    
+    def get_name(self):
+        return self.name
+    
+    def set_name(self, name):
+        self.name = name
+    
     def get_template(self):
         return self.set_template
     
@@ -63,41 +74,20 @@ class Set(object):
         coord_range.set_yRange(yRange[0], yRange[1])
 
         self.coord_range = coord_range
-
+    
     def get_iterations(self):
         return self.max_iterations
     
     def set_iterations(self, iterations:int):
         self.max_iterations = iterations
     
-    def set_generator(self, xVals:int=None, yVals:int=None):
-        """
-        Start the iterative process of generating the Mandelbrot Set.
-        """
-
-        if (xVals is None or yVals is None) and self.set_template is None:
-            raise Mandelbrot.TemplateNotGenerated("Arguments 'xVals' and 'yVals' must be provided if a set template has not yet been generated")
-        
-        if (xVals is not None and yVals is not None):
-            self.generate_template(xVals, yVals)
-        elif (xVals is not None and yVals is None) or (xVals is None and yVals is not None):
-            raise ValueError("Cannot have only one argument for 'xVals' and 'yVals'")
-
-        Z = np.zeros_like(self.set_template)
-        Z_Mask = np.ones_like(self.set_template, dtype=bool)
-        
-        for i in range(self.max_iterations):
-            # The standard equation for the Mandelbrot Set
-            Z['point'][Z_Mask] = Z['point'][Z_Mask]**2 + self.set_template['point'][Z_Mask]
-
-            divergence_mask = np.logical_and(np.absolute(Z['point']) > 2, Z_Mask)
-            Z['divergence'][divergence_mask] = i
-            Z_Mask = np.logical_and(Z_Mask, np.logical_not(divergence_mask))
-            yield (Z, i)
+    @abstractmethod
+    def __iter__(self):
+        """ Method to be overridden by implementation """
+        while False:
+            yield None
     
-    def generate_set(self, xVals:int=None, yVals:int=None):
-        mset = self.set_generator(xVals, yVals)
-
-        for i in mset:
-            self.set = i[0]
-            self.current_iteration = i[1]
+    @abstractmethod
+    def generate_set(self):
+        """ Method to be overridden by implementation """
+        pass
