@@ -14,7 +14,7 @@
         },
         "viewer": {
             "title": "Set Simulator",
-            "colormap": "twilight",
+            "colormap": "hot",
             "dimensions": {
                 "width": 600,
                 "height": 600
