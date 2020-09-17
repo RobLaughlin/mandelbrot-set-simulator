@@ -63,15 +63,5 @@ class AppConfig(object):
             self.config['defaults']['viewer']['dimensions']['height']
         except KeyError:
             raise KeyError('Invalid configuration file. Make sure all necessary keys and values are included in the config file.')
-        
-        save_icon_path = None
-        save_icon = None
-        try:
-            save_icon_path = self.config['defaults']['viewer']['saveIcon']
-            save_icon = Image.open(save_icon_path)
-        except KeyError:
-            raise KeyError('The saveIcon property was not found in %s'%self.path)
-        except FileNotFoundError:
-            raise FileNotFoundError('Save icon not found at path %s.'%save_icon_path)
 
         return True

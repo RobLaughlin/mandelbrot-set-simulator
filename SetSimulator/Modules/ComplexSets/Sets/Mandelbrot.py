@@ -35,9 +35,15 @@ class Mandelbrot(ComplexSet):
             Z_Mask = np.logical_and(Z_Mask, np.logical_not(divergence_mask))
             yield (Z, i)
     
+    def __next__(self):
+        if self.current_iteration <= self.max_iterations:
+            next_set = next(self.__iter__())
+            self.set = next_set[0]
+            self.current_iteration = next_set[1]
+            return next_set
+        else:
+            raise StopIteration
+    
     def generate_set(self):
-        mset = self.__iter__()
-
-        for i in mset:
-            self.set = i[0]
-            self.current_iteration = i[1]
+        for i in range(0, self.max_iterations):
+            self.__next__()

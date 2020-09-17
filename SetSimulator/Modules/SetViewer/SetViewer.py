@@ -6,6 +6,8 @@ from PIL import Image, ImageTk
 import json
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
+import matplotlib.animation as anim
+import math
 
 from ..ComplexSets.ComplexSet import ComplexSet as Set
 from ..ComplexSets.CoordinateRange import CoordinateRange as crange 
@@ -27,10 +29,10 @@ class SetViewer(object):
     class ColorMapNotIncluded(Exception):
         pass
 
-    # This is required due to the length of the toolbar.
-    MIN_WIDTH = 450
-    MIN_HEIGHT = 200
-    TOOLBAR_HEIGHT = 32
+    # Required for UI scaling
+    MIN_WIDTH = 600
+    MIN_HEIGHT = 600
+    SIDEPANEL_WIDTH = 250
 
     def __init_sets(self, setlist):
         if len(setlist) < 1:
@@ -44,7 +46,7 @@ class SetViewer(object):
         
         self.sets = sets
 
-    def __init__(self, setlist, save_icon, dimensions=(450,450), colormap='gray', title='Set Viewer'):
+    def __init__(self, setlist, dimensions=(450,450), iterations=250, colormap='hot', title='Set Viewer'):
         colormaps = plt.colormaps()
         if colormap not in colormaps:
             raise SetViewer.ColorMapNotIncluded('Color map "%s" is not included in the Matplotlib list of color maps.'%colormap)
@@ -55,9 +57,6 @@ class SetViewer(object):
         if dimensions[1] < SetViewer.MIN_HEIGHT:
             raise SetViewer.MinimumHeightExceeded('SetViewer height cannot be less than %d pixels.' % SetViewer.MIN_HEIGHT)
         
-        if not path.exists(save_icon):
-            raise FileNotFoundError('Save icon "%s" does not exist.'%save_icon)
-        
         self.__init_sets(setlist)
 
         self.dpi = 100
@@ -66,115 +65,148 @@ class SetViewer(object):
         self.figwidth = self.width / 100
         self.figheight = self.height / 100
         self.figure = plt.figure(figsize=(self.figwidth, self.figheight), dpi=self.dpi)
+        self.anim = None
 
-         # All Tkinter widgets in the SetViewer
+        # Root widget
         self.root = tk.Tk()
-        self.save_button = None
-        self.set_list_label = None
-        self.set_list = None
-        self.color_map_label = None
-        self.color_map_list = None
-        self.animation_checkbox = None
-        self.generate_button = None
-        
         self.root.wm_title(title)
-        self.root.geometry('%dx%d'%(self.width, self.height  + SetViewer.TOOLBAR_HEIGHT))
+        self.root.geometry('%dx%d'%(self.width + SetViewer.SIDEPANEL_WIDTH, self.height))
+        self.root.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH)
 
-        # Save button
-        self.save_img = ImageTk.PhotoImage(Image.open(save_icon), master=self.root)
-        self.save_button = tk.Button(
-            self.root, image=self.save_img, border=2, padx=4, pady=4, 
-            width=SetViewer.TOOLBAR_HEIGHT, height=SetViewer.TOOLBAR_HEIGHT)
-        self.save_button.grid(row=0, column=0, padx=(0, 8))
+        # Main set canvas
+        self.canvas = FigureCanvasTkAgg(self.figure, master=self.root)
+        self.canvas.get_tk_widget().grid(row=0, column=1, sticky=tk.E)
 
-        # Set list combobox
-        self.set_list_label = tk.Label(self.root, text='Set:')
-        self.set_list_label.grid(row=0, column=1, padx=(0, 8))
-        self.set_list = ttk.Combobox(self.root, values=list(self.sets.keys()), state='readonly', width=12)
+        # Left sidepanel frame
+        self.sidepanel = tk.LabelFrame(self.root, bd=0)
+        self.sidepanel.grid(row=0, column=0, sticky='N')
+
+        # Simulation frame
+        self.simulation_frame = tk.LabelFrame(self.sidepanel, text='Simulation', padx=4, pady=4)
+        self.simulation_frame.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH - 40)
+        self.simulation_frame.grid(row=0, column=0)
+
+        # Iteration frame
+        self.iteration_frame = tk.LabelFrame(self.simulation_frame, bd=0)
+        self.iteration_frame.grid(row=0, column=0)
+
+        # Iteration label
+        self.iteration_label = tk.Label(self.iteration_frame, text='Iterations:')
+        self.iteration_label.grid(row=0, column=0, sticky='S', pady=(0, 4))
+
+        # Iteration slider
+        self.iteration_slider = tk.Scale(self.iteration_frame, from_=1, to=iterations, orient=tk.HORIZONTAL)
+        self.iteration_slider.set(iterations)
+        self.iteration_slider.grid(row=0, column=1)
+
+        # Set list
+        self.set_group = tk.LabelFrame(self.simulation_frame, bd=0)
+        self.set_list_label = tk.Label(self.set_group, text='Set:')
+        self.set_list_label.grid(row=0, column=0, padx=(0, 8))
+        self.set_list = ttk.Combobox(self.set_group, values=list(self.sets.keys()), state='readonly', width=12)
         self.set_list.bind("<<ComboboxSelected>>",lambda e: self.root.focus())
-        self.set_list.grid(row=0, column=2)
+        self.set_list.grid(row=0, column=1)
         self.set_list.current(0)
+        self.set_group.grid(row=2, column=0, pady=4)
 
-        # Color map combobox
-        self.color_map_label = tk.Label(self.root, text='Color Map:')
-        self.color_map_label.grid(row=0, column=3, padx=8)
-        self.color_map_list = ttk.Combobox(self.root, values=colormaps, state='readonly', width=12)
-        self.color_map_list.bind("<<ComboboxSelected>>",lambda e: self.root.focus())
-        self.color_map_list.grid(row=0, column=4)
+        # Progress bar
+        self.progress_bar = ttk.Progressbar(self.simulation_frame, orient=tk.HORIZONTAL, mode='determinate', length=150)
+        self.progress_bar.grid(row=3, column=0, pady=8)
+
+        # Generate button
+        self.generate_button = tk.Button(self.simulation_frame, text='Generate', padx=48, command=self.generate)
+        self.generate_button.grid(row=4, column=0, pady=8)
+
+        # Picture frame
+        self.picture_frame = tk.LabelFrame(self.sidepanel, text='Picture')
+        self.picture_frame.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH - 40)
+        self.picture_frame.grid(row=1, column=0)
+
+        # Color map
+        self.color_map_group = tk.LabelFrame(self.picture_frame, bd=0)
+        self.color_map_label = tk.Label(self.color_map_group, text='Color Map:')
+        self.color_map_label.grid(row=0, column=0, padx=(0, 8))
+        self.color_map_list = ttk.Combobox(self.color_map_group, values=colormaps, state='readonly', width=12)
+        self.color_map_list.bind("<<ComboboxSelected>>", self.color_map_changed)
+        self.color_map_list.grid(row=0, column=1)
         self.color_map_list.current(colormaps.index(colormap))
+        self.color_map_group.grid(row=0, column=0, pady=4, sticky='W')
 
         # Animation checkbox
-        self.animation_checkbox = tk.Checkbutton(self.root, text='Animation')
-        self.animation_checkbox.grid(row=0, column=5, padx=8)
+        self.animation_check_val = tk.BooleanVar()
+        self.animation_checkbox = tk.Checkbutton(self.picture_frame, text='Animation', 
+                                                var=self.animation_check_val, command=self.animation_checkbox_clicked)
+        self.animation_checkbox.grid(row=1, column=0, padx=(0, 8), pady=2, sticky='W')
 
-    def show(self):
+        # Save button
+        self.save_button = tk.Button(self.picture_frame, text='Save Image', padx=32, pady=4, width=8)
+        self.save_button.grid(row=2, column=0, pady=(0, 16))
+
+        # Close button
+        self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
+        self.close_button.grid(row=2, column=0, pady=16, sticky='S')
+    
+    def animation_checkbox_clicked(self):
+        self.animation_check_val.set(not self.animation_check_val.get())
+    
+    def color_map_changed(self, *args):
+        selected_set = self.sets[self.set_list.get()]
+        if selected_set.set is None:
+            self.generate()
+        else:
+            selected_cmap = self.color_map_list.get()
+            self.figure.clear()
+            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
+            self.canvas.draw()
+            
+    def render(self, frame, *fargs):
+        """ Callback for every frame in animation """
+        if self.animation_check_val.get():
+            selected_cmap = self.color_map_list.get()
+            selected_set, set_, maxIters = fargs
+            selected_set.set = set_.__next__()[0]
+
+            self.figure.clear()
+            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
+            self.progress_bar['value'] = math.ceil(((frame + 1) / maxIters) * 100)
+            self.root.update_idletasks()
+        else:
+            self.anim.event_source.stop()
+            self.anim = None
+
+
+    def generate(self):
+        """ Handler for the generate button. """
         selected_set = self.sets[self.set_list.get()]
         selected_cmap = self.color_map_list.get()
+        set_ = iter(selected_set)
+        maxIters = self.iteration_slider.get()
+        
+        # Stop animation on button click
+        if self.anim is not None:
+            self.anim.event_source.stop()
+            self.anim = None
 
         if selected_set.get_template() is None:
             selected_set.generate_template(self.width, self.height)
+        
+        # Check for animation enabled
+        if self.animation_check_val.get():
+            self.anim = anim.FuncAnimation(self.figure, self.render, interval=25, frames=maxIters, repeat=False, blit=False, 
+                                            fargs=(selected_set, set_, maxIters))
+        
+        # Run standard generation without animation if animation is disabled
+        else:
+            for i in range(0, maxIters):
+                selected_set.set = set_.__next__()[0]
+                self.progress_bar['value'] = (i / maxIters) * 100
+                self.root.update_idletasks()
             
-        if selected_set.set is None:
-            selected_set.generate_set()
-        
-        self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
-        canvas = FigureCanvasTkAgg(self.figure, master=self.root)
-        canvas.get_tk_widget().grid(row=1, column=0, columnspan=6)
-        canvas.draw()
+            self.figure.clear()
+            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
+                
+        self.canvas.draw()
+        self.progress_bar['value'] = 0
 
+    def show(self):
         self.root.mainloop()
-
-        
-
-"""
-from . import Set, CoordinateRange
-from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
-import tkinter
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
-import atexit
-
-class SetViewer(Set):
-    def __init__(self, iterations:int, coord_range:CoordinateRange, figsize=(8,8), dpi=100):
-        
-        GUI inherited class of the Mandelbrot set. 
-        Displays the Mandelbrot set visually using pyplot.
-
-        Params in addition to the Mandelbrot class:
-        figsize (x, y) - Size of the figure in inches
-        dpi - pixels per inch
-
-        ex: figsize=(8,8) dpi=100 yields a 800x800 pixel figure.
-        
-
-        super().__init__(iterations=iterations, coord_range=coord_range)
-        self.figsize = figsize
-        self.dpi = dpi
-
-        self.root = tkinter.Tk()
-        self.root.wm_title('Mandelbrot Set SetViewer')
-        self.__figure = plt.figure(figsize=figsize, dpi=dpi)
-
-    def show(self, colormap='gray', aspect_ratio='auto'):
-        if self.set_template is None:
-            self.generate_template(int(self.figsize[0] * self.dpi), int(self.figsize[1] * self.dpi))
-            
-        if self.set is None:
-            self.generate_set()
-
-        self.__figure.figimage(self.set['divergence'], cmap=colormap)
-        canvas = FigureCanvasTkAgg(self.__figure, master=self.root)
-        canvas.get_tk_widget().pack()
-        canvas.draw()
-
-        tkinter.Button(self.root, text="Close", command=self.__onclose).pack()
-        self.root.mainloop()
-
-    def __onclose(self):
-        try:
-            self.root.quit()
-            self.root.destroy()
-        except:
-            pass
-"""
