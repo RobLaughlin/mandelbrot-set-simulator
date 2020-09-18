@@ -30,6 +30,7 @@ class SetViewer(object):
     class ColorMapNotIncluded(Exception):
         pass
     
+    NULLSET_PNG = 'img/nullset.png'
     SAVE_DIRECTORY = 'images'
 
     # Required for UI scaling
@@ -177,7 +178,24 @@ class SetViewer(object):
         # Close button
         self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
         self.close_button.grid(row=2, column=0, pady=16, sticky='S')
-    
+
+        self.load_default_figure()
+
+    def load_default_figure(self):
+        """ Load the null set image into figure when the GUI loads """
+        if not path.exists(SetViewer.NULLSET_PNG):
+            raise FileNotFoundError('%s File not found.' % SetViewer.NULLSET_PNG)
+        
+        img = Image.open(SetViewer.NULLSET_PNG)
+
+        # Pad image with emptiness
+        new_img = Image.new('RGBA', (self.width, self.height), 'white')
+        offset_width = (self.width - img.width) // 2
+        offset_height = (self.height - img.height) // 2
+        new_img.paste(img, (offset_width, offset_height))
+        
+        self.figure.figimage(new_img, cmap='gray')
+        
     def save_button_handler(self):
         if not path.exists(SetViewer.SAVE_DIRECTORY):
             makedirs(SetViewer.SAVE_DIRECTORY)
