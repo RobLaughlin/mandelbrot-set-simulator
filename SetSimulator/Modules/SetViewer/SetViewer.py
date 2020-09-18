@@ -220,7 +220,8 @@ class SetViewer(object):
         if self.animation_check_val.get():
             selected_cmap = self.color_map_list.get()
             selected_set, set_, maxIters = fargs
-
+            
+            
             # Dynamically update animation delay every frame
             delay = self.interval_slider.get()
             self.anim.event_source.interval = delay
@@ -230,6 +231,10 @@ class SetViewer(object):
             self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
             self.progress_bar['value'] = math.ceil(((frame + 1) / maxIters) * 100)
             self.root.update_idletasks()
+    
+            if (frame + 1) == maxIters:
+                self.progress_bar['value'] = 0
+
         else:
             self.anim.event_source.stop()
             self.anim = None
