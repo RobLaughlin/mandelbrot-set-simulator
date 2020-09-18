@@ -68,7 +68,11 @@ class SetViewer(object):
         self.figwidth = self.width / 100
         self.figheight = self.height / 100
         self.figure = plt.figure(figsize=(self.figwidth, self.figheight), dpi=self.dpi)
+
+        # Animation source for the set being generated
         self.anim = None
+
+        # To track where tkinter is during the generation process
         self.after_id = None
 
         # Root widget
@@ -253,8 +257,5 @@ class SetViewer(object):
         else:
             generate_()
                 
-       
-        
-
     def show(self):
         self.root.mainloop()
