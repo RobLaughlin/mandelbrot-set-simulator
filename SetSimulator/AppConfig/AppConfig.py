@@ -56,6 +56,7 @@ class AppConfig(object):
             self.config['defaults']['set']['yRange']['max']
 
             self.config['defaults']['viewer']
+            self.config['defaults']['viewer']['max_animation_frame_delay']
             self.config['defaults']['viewer']['title']
             self.config['defaults']['viewer']['colormap']
             self.config['defaults']['viewer']['dimensions']

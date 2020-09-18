@@ -15,6 +15,7 @@ def init():
         title = viewer['title']
         width = viewer['dimensions']['width']
         height = viewer['dimensions']['height']
+        max_anim_frame_delay = viewer['max_animation_frame_delay']
 
         # Set config
         set_template = config['defaults']['set']
@@ -24,10 +25,11 @@ def init():
         ymin = set_template['yRange']['min']
         ymax = set_template['yRange']['max']
         crange = CoordinateRange(xmin, xmax, ymin, ymax)
-
+        
         mset = Mandelbrot(iterations=max_iterations, coord_range=crange)
         sets = [mset]
-        viewer = SetViewer(setlist=sets, title=title, colormap=colormap, iterations=max_iterations, dimensions=(width, height))
+        viewer = SetViewer(setlist=sets, title=title, colormap=colormap, iterations=max_iterations, 
+                            dimensions=(width, height), max_interval_delay=max_anim_frame_delay)
         viewer.show()
 
 if __name__ == '__main__':

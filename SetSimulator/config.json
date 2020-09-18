@@ -18,7 +18,8 @@
             "dimensions": {
                 "width": 600,
                 "height": 600
-            }
+            },
+            "max_animation_frame_delay": 250
         }
     }
 }

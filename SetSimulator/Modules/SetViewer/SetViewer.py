@@ -33,6 +33,9 @@ class SetViewer(object):
     MIN_WIDTH = 600
     MIN_HEIGHT = 600
     SIDEPANEL_WIDTH = 250
+    
+    # Required to prevent UI lockup in animation
+    MIN_FRAME_DELAY = 1
 
     def __init_sets(self, setlist):
         if len(setlist) < 1:
@@ -46,7 +49,7 @@ class SetViewer(object):
         
         self.sets = sets
 
-    def __init__(self, setlist, dimensions=(450,450), iterations=250, colormap='hot', title='Set Viewer'):
+    def __init__(self, setlist, dimensions=(450,450), iterations=250, colormap='hot', title='Set Viewer', max_interval_delay=1000):
         colormaps = plt.colormaps()
         if colormap not in colormaps:
             raise SetViewer.ColorMapNotIncluded('Color map "%s" is not included in the Matplotlib list of color maps.'%colormap)
@@ -66,6 +69,7 @@ class SetViewer(object):
         self.figheight = self.height / 100
         self.figure = plt.figure(figsize=(self.figwidth, self.figheight), dpi=self.dpi)
         self.anim = None
+        self.after_id = None
 
         # Root widget
         self.root = tk.Tk()
@@ -96,8 +100,21 @@ class SetViewer(object):
 
         # Iteration slider
         self.iteration_slider = tk.Scale(self.iteration_frame, from_=1, to=iterations, orient=tk.HORIZONTAL)
-        self.iteration_slider.set(iterations)
+        self.iteration_slider.set(iterations // 2)
         self.iteration_slider.grid(row=0, column=1)
+
+        # Animation interval frame
+        self.interval_frame= tk.LabelFrame(self.simulation_frame, bd=0)
+        self.interval_frame.grid(row=1, column=0, pady=(0, 4))
+
+        # Interval label
+        self.interval_label = tk.Label(self.interval_frame, text='Delay (MS):')
+        self.interval_label.grid(row=0, column=0, sticky='S', pady=(0, 4))
+
+        # Interval slider
+        self.interval_slider = tk.Scale(self.interval_frame, from_=SetViewer.MIN_FRAME_DELAY, to=max_interval_delay, orient=tk.HORIZONTAL)
+        self.interval_slider.set(max_interval_delay // 2)
+        self.interval_slider.grid(row=0, column=1)
 
         # Set list
         self.set_group = tk.LabelFrame(self.simulation_frame, bd=0)
@@ -107,15 +124,23 @@ class SetViewer(object):
         self.set_list.bind("<<ComboboxSelected>>",lambda e: self.root.focus())
         self.set_list.grid(row=0, column=1)
         self.set_list.current(0)
-        self.set_group.grid(row=2, column=0, pady=4)
+        self.set_group.grid(row=2, column=0, pady=8)
 
         # Progress bar
         self.progress_bar = ttk.Progressbar(self.simulation_frame, orient=tk.HORIZONTAL, mode='determinate', length=150)
         self.progress_bar.grid(row=3, column=0, pady=8)
 
+        # Generation frame
+        self.generation_frame = tk.LabelFrame(self.simulation_frame, bd=0)
+        self.generation_frame.grid(row=4, column=0)
+
         # Generate button
-        self.generate_button = tk.Button(self.simulation_frame, text='Generate', padx=48, command=self.generate)
-        self.generate_button.grid(row=4, column=0, pady=8)
+        self.generate_button = tk.Button(self.generation_frame, text='Generate', padx=20, command=self.generate)
+        self.generate_button.grid(row=0, column=0, pady=8, padx=4)
+
+        # Stop generation button
+        self.cancel_button = tk.Button(self.generation_frame, text='Cancel', padx=20, command=self.stop_generation)
+        self.cancel_button.grid(row=0, column=1, pady=8, padx=4)
 
         # Picture frame
         self.picture_frame = tk.LabelFrame(self.sidepanel, text='Picture')
@@ -140,7 +165,7 @@ class SetViewer(object):
 
         # Save button
         self.save_button = tk.Button(self.picture_frame, text='Save Image', padx=32, pady=4, width=8)
-        self.save_button.grid(row=2, column=0, pady=(0, 16))
+        self.save_button.grid(row=3, column=0, pady=8)
 
         # Close button
         self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
@@ -151,9 +176,7 @@ class SetViewer(object):
     
     def color_map_changed(self, *args):
         selected_set = self.sets[self.set_list.get()]
-        if selected_set.set is None:
-            self.generate()
-        else:
+        if selected_set.set is not None:
             selected_cmap = self.color_map_list.get()
             self.figure.clear()
             self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
@@ -164,8 +187,12 @@ class SetViewer(object):
         if self.animation_check_val.get():
             selected_cmap = self.color_map_list.get()
             selected_set, set_, maxIters = fargs
-            selected_set.set = set_.__next__()[0]
 
+            # Dynamically update animation delay every frame
+            delay = self.interval_slider.get()
+            self.anim.event_source.interval = delay
+
+            selected_set.set = set_.__next__()[0]
             self.figure.clear()
             self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
             self.progress_bar['value'] = math.ceil(((frame + 1) / maxIters) * 100)
@@ -173,40 +200,61 @@ class SetViewer(object):
         else:
             self.anim.event_source.stop()
             self.anim = None
-
-
-    def generate(self):
-        """ Handler for the generate button. """
-        selected_set = self.sets[self.set_list.get()]
-        selected_cmap = self.color_map_list.get()
-        set_ = iter(selected_set)
-        maxIters = self.iteration_slider.get()
+    
+    def stop_generation(self):
+        # Check if a set is currently being generated
+        if self.after_id is not None:
+             self.root.after_cancel(self.after_id)
+             self.after_id = None
         
         # Stop animation on button click
         if self.anim is not None:
             self.anim.event_source.stop()
             self.anim = None
 
+        self.progress_bar['value'] = 0
+
+    def generate(self):
+        """ Handler for the generate button. """
+        selected_set = self.sets[self.set_list.get()]
+        maxIters = self.iteration_slider.get()
+        set_ = iter(selected_set)
+        
+        # Required helper function to prevent GUI lockup
+        def generate_(i=0):
+            if i < maxIters:
+                delay = self.interval_slider.get()
+                selected_set.set = set_.__next__()[0]
+                self.progress_bar['value'] = (i / maxIters) * 100
+                self.root.update_idletasks()
+                self.after_id = self.root.after(delay, lambda: generate_(i+1))
+            else:
+                selected_cmap = self.color_map_list.get()
+
+                self.figure.clear()
+                self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
+                self.progress_bar['value'] = 0
+                self.canvas.draw()
+                self.after_id = None
+
+        self.stop_generation()
+
         if selected_set.get_template() is None:
             selected_set.generate_template(self.width, self.height)
         
         # Check for animation enabled
         if self.animation_check_val.get():
-            self.anim = anim.FuncAnimation(self.figure, self.render, interval=25, frames=maxIters, repeat=False, blit=False, 
+            delay = self.interval_slider.get()
+            self.anim = anim.FuncAnimation(self.figure, self.render, interval=delay, frames=maxIters, repeat=False, blit=False, 
                                             fargs=(selected_set, set_, maxIters))
-        
+            self.canvas.draw()
+
         # Run standard generation without animation if animation is disabled
         else:
-            for i in range(0, maxIters):
-                selected_set.set = set_.__next__()[0]
-                self.progress_bar['value'] = (i / maxIters) * 100
-                self.root.update_idletasks()
-            
-            self.figure.clear()
-            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
+            generate_()
                 
-        self.canvas.draw()
-        self.progress_bar['value'] = 0
+       
+        
 
     def show(self):
         self.root.mainloop()
