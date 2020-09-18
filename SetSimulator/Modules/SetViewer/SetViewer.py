@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from os import path
+from os import path, makedirs
 from matplotlib import pyplot as plt
 from PIL import Image, ImageTk
 import json
@@ -8,6 +8,7 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 import matplotlib.animation as anim
 import math
+import time
 
 from ..ComplexSets.ComplexSet import ComplexSet as Set
 from ..ComplexSets.CoordinateRange import CoordinateRange as crange 
@@ -28,6 +29,8 @@ class SetViewer(object):
     
     class ColorMapNotIncluded(Exception):
         pass
+    
+    SAVE_DIRECTORY = 'images'
 
     # Required for UI scaling
     MIN_WIDTH = 600
@@ -168,12 +171,20 @@ class SetViewer(object):
         self.animation_checkbox.grid(row=1, column=0, padx=(0, 8), pady=2, sticky='W')
 
         # Save button
-        self.save_button = tk.Button(self.picture_frame, text='Save Image', padx=32, pady=4, width=8)
+        self.save_button = tk.Button(self.picture_frame, text='Save Image', command=self.save_button_handler, padx=32, pady=4, width=8)
         self.save_button.grid(row=3, column=0, pady=8)
 
         # Close button
         self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
         self.close_button.grid(row=2, column=0, pady=16, sticky='S')
+    
+    def save_button_handler(self):
+        if not path.exists(SetViewer.SAVE_DIRECTORY):
+            makedirs(SetViewer.SAVE_DIRECTORY)
+        
+        selected_set = self.sets[self.set_list.get()]
+        current_time = time.strftime("%Y-%m-%d %I %M %p")
+        plt.savefig(SetViewer.SAVE_DIRECTORY + '/%s Set - %s' % (selected_set.name, current_time))
     
     def animation_checkbox_clicked(self):
         self.animation_check_val.set(not self.animation_check_val.get())
