@@ -250,8 +250,6 @@ class SetViewer(object):
             self.anim.event_source.stop()
             self.anim = None
 
-        self.progress_bar['value'] = 0
-
     def generate(self):
         """ Handler for the generate button. """
         selected_set = self.sets[self.set_list.get()]
