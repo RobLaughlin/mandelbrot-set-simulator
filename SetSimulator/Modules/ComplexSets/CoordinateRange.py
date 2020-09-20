@@ -6,10 +6,7 @@ class CoordinateRange(object):
         """
         Sets a strict boundary between x and y values.
         """
-        self.xRange = None
         self.set_xRange(minX, maxX)
-
-        self.yRange = None
         self.set_yRange(minY, maxY)
 
     def get_xRange(self):

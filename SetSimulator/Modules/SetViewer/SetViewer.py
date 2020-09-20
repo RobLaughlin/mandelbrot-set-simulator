@@ -78,6 +78,10 @@ class SetViewer(object):
 
         # To track where tkinter is during the generation process
         self.after_id = None
+        self.__init_GUI(iterations, colormap, title, max_interval_delay, colormaps)
+
+    def __init_GUI(self, iterations, colormap, title, max_interval_delay, colormaps):
+        """ Ugly monolithic GUI code (most of which is the sidebar) """
 
         # Root widget
         self.root = tk.Tk()
@@ -175,12 +179,95 @@ class SetViewer(object):
         self.save_button = tk.Button(self.picture_frame, text='Save Image', command=self.save_button_handler, padx=32, pady=4, width=8)
         self.save_button.grid(row=3, column=0, pady=8)
 
+        # XY range frame
+        self.xy_frame = tk.LabelFrame(self.sidepanel, text='XY Coordinate Range')
+        self.xy_frame.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH - 40)
+        self.xy_frame.grid(row=2, column=0)
+
+        # Use this to get the min/max range of the default selected set
+        selected_set = self.sets[self.set_list.get()]
+        
+        # Validate entry command
+        vdbl = (self.root.register(self.validate_double), '%P')
+
+        # X range frame
+        self.x_frame = tk.LabelFrame(self.xy_frame, bd=0)
+        self.x_frame.grid(row=0, column=0, pady=(8, 0))
+
+        # Min x frame
+        self.min_x_frame = tk.LabelFrame(self.x_frame, bd=0)
+        self.min_x_frame.grid(row=0, column=0, padx=4)
+        
+        # Min x label
+        self.min_x_label = tk.Label(self.min_x_frame, text='Min x:')
+        self.min_x_label.grid(row=0, column=0)
+
+        # Min x entry
+        min_x = selected_set.get_coord_range().get_xRange()[0]
+        self.min_x_entry = tk.Entry(self.min_x_frame, width=8, validate='key', validatecommand=vdbl)
+        self.min_x_entry.insert(0, str(min_x))
+        self.min_x_entry.grid(row=0, column=1)
+
+        # Max x frame
+        self.max_x_frame = tk.LabelFrame(self.x_frame, bd=0)
+        self.max_x_frame.grid(row=0, column=1, padx=4)
+
+        # Max x label
+        self.max_x_label = tk.Label(self.max_x_frame, text='Max x:')
+        self.max_x_label.grid(row=0, column=0)
+
+        # Max x entry
+        max_x = selected_set.get_coord_range().get_xRange()[1]
+        self.max_x_entry = tk.Entry(self.max_x_frame, width=8, validate='key', validatecommand=vdbl)
+        self.max_x_entry.insert(0, str(max_x))
+        self.max_x_entry.grid(row=0, column=1)
+
+        # Y range frame
+        self.y_frame = tk.LabelFrame(self.xy_frame, bd=0)
+        self.y_frame.grid(row=1, column=0, pady=8)
+
+        # Min y frame
+        self.min_y_frame = tk.LabelFrame(self.y_frame, bd=0)
+        self.min_y_frame.grid(row=0, column=0, padx=4)
+        
+        # Min y label
+        self.min_y_label = tk.Label(self.min_y_frame, text='Min y:')
+        self.min_y_label.grid(row=0, column=0)
+
+        # Min y entry
+        min_y = selected_set.get_coord_range().get_yRange()[0]
+        self.min_y_entry = tk.Entry(self.min_y_frame, width=8, validate='key', validatecommand=vdbl)
+        self.min_y_entry.insert(0, str(min_y))
+        self.min_y_entry.grid(row=0, column=1)
+
+        # Max y frame
+        self.max_y_frame = tk.LabelFrame(self.y_frame, bd=0)
+        self.max_y_frame.grid(row=0, column=1, padx=4)
+
+        # Max y label
+        self.max_y_label = tk.Label(self.max_y_frame, text='Max y:')
+        self.max_y_label.grid(row=0, column=0)
+
+        # Max y entry
+        max_y = selected_set.get_coord_range().get_yRange()[1]
+        self.max_y_entry = tk.Entry(self.max_y_frame, width=8, validate='key', validatecommand=vdbl)
+        self.max_y_entry.insert(0, str(max_y))
+        self.max_y_entry.grid(row=0, column=1)
+
         # Close button
         self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
-        self.close_button.grid(row=2, column=0, pady=16, sticky='S')
+        self.close_button.grid(row=3, column=0, pady=16, sticky='S')
 
         self.load_default_figure()
 
+    def validate_double(self, input_):
+        try:
+            float(input_)
+        except ValueError:
+            return False
+        
+        return True
+    
     def load_default_figure(self):
         """ Load the null set image into figure when the GUI loads """
         if not path.exists(SetViewer.NULLSET_PNG):
@@ -252,6 +339,17 @@ class SetViewer(object):
 
     def generate(self):
         """ Handler for the generate button. """
+        minX = float(self.min_x_entry.get())
+        maxX = float(self.max_x_entry.get())
+        minY = float(self.min_y_entry.get())
+        maxY = float(self.max_y_entry.get())
+        coords = None
+        try:
+            coords = crange(minX, maxX, minY, maxY)
+        except crange.InvalidCoordinateBounds as err:
+            tk.messagebox.showerror(title='Invalid Coordinate Bounds', message=err)
+            return
+        
         selected_set = self.sets[self.set_list.get()]
         maxIters = self.iteration_slider.get()
         set_ = iter(selected_set)
@@ -277,6 +375,8 @@ class SetViewer(object):
 
         if selected_set.get_template() is None:
             selected_set.generate_template(self.width, self.height)
+        
+        selected_set.set_coord_range(coords)
         
         # Check for animation enabled
         if self.animation_check_val.get():
