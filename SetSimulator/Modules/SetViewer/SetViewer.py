@@ -317,10 +317,11 @@ class SetViewer(object):
             self.figure.clear()
             self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
             self.progress_bar['value'] = math.ceil(((frame + 1) / maxIters) * 100)
-            self.root.update_idletasks()
-    
+            
             if (frame + 1) == maxIters:
                 self.progress_bar['value'] = 0
+
+            self.root.update_idletasks()
 
         else:
             self.anim.event_source.stop()
