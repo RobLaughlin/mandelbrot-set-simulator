@@ -258,6 +258,7 @@ class SetViewer(object):
         self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
         self.close_button.grid(row=3, column=0, pady=16, sticky='S')
 
+        # Load default set figure
         self.load_default_figure()
 
     def validate_double(self, input_):
@@ -308,7 +309,6 @@ class SetViewer(object):
             selected_cmap = self.color_map_list.get()
             selected_set, set_, maxIters = fargs
             
-            
             # Dynamically update animation delay every frame
             delay = self.interval_slider.get()
             self.anim.event_source.interval = delay
@@ -317,8 +317,8 @@ class SetViewer(object):
             self.figure.clear()
             self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
             self.progress_bar['value'] = math.ceil(((frame + 1) / maxIters) * 100)
-            
-            if (frame + 1) == maxIters:
+
+            if (frame + 2) >= maxIters:
                 self.progress_bar['value'] = 0
 
             self.root.update_idletasks()
@@ -383,7 +383,7 @@ class SetViewer(object):
         if self.animation_check_val.get():
             delay = self.interval_slider.get()
             self.anim = anim.FuncAnimation(self.figure, self.render, interval=delay, frames=maxIters, repeat=False, blit=False, 
-                                            fargs=(selected_set, set_, maxIters))
+                                            fargs=(selected_set, set_, maxIters), cache_frame_data=False)
             self.canvas.draw()
 
         # Run standard generation without animation if animation is disabled
