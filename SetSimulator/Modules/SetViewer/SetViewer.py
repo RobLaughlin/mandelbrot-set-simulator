@@ -73,6 +73,9 @@ class SetViewer(object):
         self.figheight = self.height / 100
         self.figure = plt.figure(figsize=(self.figwidth, self.figheight), dpi=self.dpi)
 
+        # For depth of zoom on canvas
+        self.zoom_level = 0
+
         # Animation source for the set being generated
         self.anim = None
 
@@ -188,7 +191,7 @@ class SetViewer(object):
         selected_set = self.sets[self.set_list.get()]
         
         # Validate entry command
-        vdbl = (self.root.register(self.validate_double), '%P')
+        vdbl = (self.root.register(self.validate_range_entries), '%S', '%P')
 
         # X range frame
         self.x_frame = tk.LabelFrame(self.xy_frame, bd=0)
@@ -261,11 +264,56 @@ class SetViewer(object):
         # Load default set figure
         self.load_default_figure()
 
-    def validate_double(self, input_):
+        self.canvas.mpl_connect('button_press_event', self.canvas_onclick)
+
+    def update_xyrange(self, coord_range:crange):
+        selected_set = self.sets[self.set_list.get()]
+        x_range = coord_range.get_xRange()
+        y_range = coord_range.get_yRange()
+
+        self.min_x_entry.delete(0, tk.END)
+        self.min_x_entry.insert(0, str(x_range[0]))
+
+        self.max_x_entry.delete(0, tk.END)
+        self.max_x_entry.insert(0, str(x_range[1]))
+
+        self.min_y_entry.delete(0, tk.END)
+        self.min_y_entry.insert(0, str(y_range[0]))
+
+        self.max_y_entry.delete(0, tk.END)
+        self.max_y_entry.insert(0, str(y_range[1]))
+
+    def canvas_onclick(self, event):
+        """ Handler for clicking the set canvas """
+
+        # Handle which button was pressed
+        btn_pressed = str(event.button)
+        if btn_pressed == 'MouseButton.LEFT':
+            self.zoom_level += 1
+        elif btn_pressed == 'MouseButton.RIGHT':
+            self.zoom_level -= 1
+        
+        selected_set = self.sets[self.set_list.get()]
+        
+        # Some zoom math
+        x_range = selected_set.get_coord_range().get_xRange()
+        y_range = selected_set.get_coord_range().get_yRange()
+        x_len = abs(x_range[1] - x_range[0])
+        y_len = abs(y_range[1] - y_range[0])
+        rel_x = x_range[0] + x_len * (event.x / self.width)
+        rel_y = y_range[0] + y_len * (event.y / self.height)
+        rel_zoom = (0.5**self.zoom_level)
+
+        new_crange = crange(rel_x - rel_zoom, rel_x + rel_zoom, rel_y - rel_zoom, rel_y + rel_zoom)
+        self.update_xyrange(new_crange)
+        self.generate()
+
+    def validate_range_entries(self, key, entry):
         try:
-            float(input_)
-        except ValueError:
-            return False
+            float(entry)
+        except:
+            if entry != '':
+                return False
         
         return True
     
@@ -282,7 +330,7 @@ class SetViewer(object):
         offset_height = (self.height - img.height) // 2
         new_img.paste(img, (offset_width, offset_height))
         
-        self.figure.figimage(new_img, cmap='gray')
+        self.figure.figimage(new_img, cmap='gray', origin='lower')
         
     def save_button_handler(self):
         if not path.exists(SetViewer.SAVE_DIRECTORY):
@@ -300,7 +348,7 @@ class SetViewer(object):
         if selected_set.set is not None:
             selected_cmap = self.color_map_list.get()
             self.figure.clear()
-            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
+            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap, origin='lower')
             self.canvas.draw()
             
     def render(self, frame, *fargs):
@@ -315,7 +363,7 @@ class SetViewer(object):
 
             selected_set.set = set_.__next__()[0]
             self.figure.clear()
-            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
+            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap, origin='lower')
             self.progress_bar['value'] = math.ceil(((frame + 1) / maxIters) * 100)
 
             if (frame + 2) >= maxIters:
@@ -340,15 +388,19 @@ class SetViewer(object):
 
     def generate(self):
         """ Handler for the generate button. """
-        minX = float(self.min_x_entry.get())
-        maxX = float(self.max_x_entry.get())
-        minY = float(self.min_y_entry.get())
-        maxY = float(self.max_y_entry.get())
+
         coords = None
         try:
+            minX = float(self.min_x_entry.get())
+            maxX = float(self.max_x_entry.get())
+            minY = float(self.min_y_entry.get())
+            maxY = float(self.max_y_entry.get())
             coords = crange(minX, maxX, minY, maxY)
         except crange.InvalidCoordinateBounds as err:
             tk.messagebox.showerror(title='Invalid Coordinate Bounds', message=err)
+            return
+        except ValueError:
+            tk.messagebox.showerror(title='Value Error', message="Invalid XY Range values.")
             return
         
         selected_set = self.sets[self.set_list.get()]
@@ -367,7 +419,7 @@ class SetViewer(object):
                 selected_cmap = self.color_map_list.get()
 
                 self.figure.clear()
-                self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap)
+                self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap, origin='lower')
                 self.progress_bar['value'] = 0
                 self.canvas.draw()
                 self.after_id = None

@@ -2,7 +2,7 @@
     "defaults": {
         "set":
         {
-            "maxIterations": 200,
+            "maxIterations": 1000,
             "xRange": {
                 "min": -3,
                 "max": 1
@@ -14,7 +14,7 @@
         },
         "viewer": {
             "title": "Set Simulator",
-            "colormap": "hot",
+            "colormap": "coolwarm",
             "dimensions": {
                 "width": 600,
                 "height": 600
