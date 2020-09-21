@@ -7,6 +7,7 @@ import json
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 import matplotlib.animation as anim
+import webbrowser
 import math
 import time
 
@@ -30,7 +31,10 @@ class SetViewer(object):
     class ColorMapNotIncluded(Exception):
         pass
     
+    GITHUB_URL = 'https://github.com/RobLaughlin/complex-set-simulator'
+
     NULLSET_PNG = 'img/nullset.png'
+    GITHUB_PNG = 'img/github.png'
     SIMULATOR_ICON = 'img/mset.ico'
     SAVE_DIRECTORY = 'images'
 
@@ -96,7 +100,7 @@ class SetViewer(object):
         self.root.geometry('%dx%d'%(self.width + SetViewer.SIDEPANEL_WIDTH, self.height))
         self.root.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH)
         self.root.iconbitmap(SetViewer.SIMULATOR_ICON)
-        
+
         # Main set canvas
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.root)
         self.canvas.get_tk_widget().grid(row=0, column=1, sticky=tk.E)
@@ -116,6 +120,16 @@ class SetViewer(object):
         
         # Load default set figure
         self.load_default_figure()
+
+        # Github link
+        if not path.exists(SetViewer.GITHUB_PNG):
+            raise FileNotFoundError('%s File not found.' % SetViewer.GITHUB_PNG)
+
+        img = Image.open(SetViewer.GITHUB_PNG)
+        gh_img = ImageTk.PhotoImage(img, master=self.sidepanel)
+        self.gh_button = tk.Button(self.sidepanel, image=gh_img, border=1, command=lambda: webbrowser.open(SetViewer.GITHUB_URL))
+        self.gh_button.image = gh_img
+        self.gh_button.grid(row=4, column=0, sticky='S')
 
         # Set zoom handler
         self.canvas.mpl_connect('button_press_event', self.canvas_onclick)
