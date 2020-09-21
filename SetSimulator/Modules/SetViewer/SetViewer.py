@@ -100,6 +100,23 @@ class SetViewer(object):
         self.sidepanel = tk.LabelFrame(self.root, bd=0)
         self.sidepanel.grid(row=0, column=0, sticky='N')
 
+        # Sidepanel contents
+        self.__load_simulation_section(iterations, max_interval_delay)
+        self.__load_picture_section(colormaps, colormap)
+        self.__load_xyrange_section()
+
+        # Close button
+        self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
+        self.close_button.grid(row=3, column=0, pady=16, sticky='S')
+        
+        # Load default set figure
+        self.load_default_figure()
+
+        # Set zoom handler
+        self.canvas.mpl_connect('button_press_event', self.canvas_onclick)
+    
+    def __load_simulation_section(self, iterations, max_interval_delay):
+
         # Simulation frame
         self.simulation_frame = tk.LabelFrame(self.sidepanel, text='Simulation', padx=4, pady=4)
         self.simulation_frame.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH - 40)
@@ -157,6 +174,8 @@ class SetViewer(object):
         self.cancel_button = tk.Button(self.generation_frame, text='Cancel', padx=20, command=self.stop_generation)
         self.cancel_button.grid(row=0, column=1, pady=8, padx=4)
 
+    def __load_picture_section(self, colormaps, colormap):
+
         # Picture frame
         self.picture_frame = tk.LabelFrame(self.sidepanel, text='Picture')
         self.picture_frame.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH - 40)
@@ -173,14 +192,17 @@ class SetViewer(object):
         self.color_map_group.grid(row=0, column=0, pady=4, sticky='W')
 
         # Animation checkbox
-        self.animation_check_val = tk.BooleanVar()
+        self.animation_check_val = tk.BooleanVar(value=True)
         self.animation_checkbox = tk.Checkbutton(self.picture_frame, text='Animation', 
-                                                var=self.animation_check_val, command=self.animation_checkbox_clicked)
+                                                variable=self.animation_check_val, command=self.animation_checkbox_clicked)
         self.animation_checkbox.grid(row=1, column=0, padx=(0, 8), pady=2, sticky='W')
+        self.animation_checkbox.select()
 
         # Save button
         self.save_button = tk.Button(self.picture_frame, text='Save Image', command=self.save_button_handler, padx=32, pady=4, width=8)
         self.save_button.grid(row=3, column=0, pady=8)
+
+    def __load_xyrange_section(self):
 
         # XY range frame
         self.xy_frame = tk.LabelFrame(self.sidepanel, text='XY Coordinate Range')
@@ -256,15 +278,6 @@ class SetViewer(object):
         self.max_y_entry = tk.Entry(self.max_y_frame, width=8, validate='key', validatecommand=vdbl)
         self.max_y_entry.insert(0, str(max_y))
         self.max_y_entry.grid(row=0, column=1)
-
-        # Close button
-        self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
-        self.close_button.grid(row=3, column=0, pady=16, sticky='S')
-
-        # Load default set figure
-        self.load_default_figure()
-
-        self.canvas.mpl_connect('button_press_event', self.canvas_onclick)
 
     def update_xyrange(self, coord_range:crange):
         selected_set = self.sets[self.set_list.get()]
