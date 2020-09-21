@@ -279,7 +279,7 @@ class SetViewer(object):
         self.max_y_entry.insert(0, str(max_y))
         self.max_y_entry.grid(row=0, column=1)
 
-    def update_xyrange(self, coord_range:crange):
+    def update_xyrange_entries(self, coord_range:crange):
         selected_set = self.sets[self.set_list.get()]
         x_range = coord_range.get_xRange()
         y_range = coord_range.get_yRange()
@@ -318,7 +318,7 @@ class SetViewer(object):
         rel_zoom = (0.5**self.zoom_level)
 
         new_crange = crange(rel_x - rel_zoom, rel_x + rel_zoom, rel_y - rel_zoom, rel_y + rel_zoom)
-        self.update_xyrange(new_crange)
+        self.update_xyrange_entries(new_crange)
         self.generate()
 
     def validate_range_entries(self, key, entry):
