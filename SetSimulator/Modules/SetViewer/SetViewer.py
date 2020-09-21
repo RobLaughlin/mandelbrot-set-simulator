@@ -299,7 +299,6 @@ class SetViewer(object):
         self.max_y_entry.grid(row=0, column=1)
 
     def update_xyrange_entries(self, coord_range:crange):
-        selected_set = self.sets[self.set_list.get()]
         x_range = coord_range.get_xRange()
         y_range = coord_range.get_yRange()
 
