@@ -58,7 +58,7 @@ class SetViewer(object):
         
         self.sets = sets
 
-    def __init__(self, setlist, dimensions=(450,450), iterations=250, colormap='hot', title='Set Viewer', max_interval_delay=1000):
+    def __init__(self, setlist, dimensions=(600,600), iterations=250, colormap='hot', title='Set Viewer', max_interval_delay=1000):
         colormaps = plt.colormaps()
         if colormap not in colormaps:
             raise SetViewer.ColorMapNotIncluded('Color map "%s" is not included in the Matplotlib list of color maps.'%colormap)
