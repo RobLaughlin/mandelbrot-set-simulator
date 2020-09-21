@@ -31,6 +31,7 @@ class SetViewer(object):
         pass
     
     NULLSET_PNG = 'img/nullset.png'
+    SIMULATOR_ICON = 'img/mset.ico'
     SAVE_DIRECTORY = 'images'
 
     # Required for UI scaling
@@ -63,7 +64,7 @@ class SetViewer(object):
 
         if dimensions[1] < SetViewer.MIN_HEIGHT:
             raise SetViewer.MinimumHeightExceeded('SetViewer height cannot be less than %d pixels.' % SetViewer.MIN_HEIGHT)
-        
+
         self.__init_sets(setlist)
 
         self.dpi = 100
@@ -86,12 +87,16 @@ class SetViewer(object):
     def __init_GUI(self, iterations, colormap, title, max_interval_delay, colormaps):
         """ Ugly monolithic GUI code (most of which is the sidebar) """
 
+        if not path.exists(SetViewer.SIMULATOR_ICON):
+            raise FileNotFoundError('%s File not found.' % SetViewer.SIMULATOR_ICON)
+
         # Root widget
         self.root = tk.Tk()
         self.root.wm_title(title)
         self.root.geometry('%dx%d'%(self.width + SetViewer.SIDEPANEL_WIDTH, self.height))
         self.root.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH)
-
+        self.root.iconbitmap(SetViewer.SIMULATOR_ICON)
+        
         # Main set canvas
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.root)
         self.canvas.get_tk_widget().grid(row=0, column=1, sticky=tk.E)
