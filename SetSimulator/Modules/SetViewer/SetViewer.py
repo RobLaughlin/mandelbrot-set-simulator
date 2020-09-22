@@ -10,6 +10,7 @@ import matplotlib.animation as anim
 import webbrowser
 import math
 import time
+import copy
 
 from ..ComplexSets.ComplexSet import ComplexSet as Set
 from ..ComplexSets.CoordinateRange import CoordinateRange as crange 
@@ -54,9 +55,13 @@ class SetViewer(object):
 
         for s in setlist:
             if s.name not in sets:
+                if s.get_template() is None:
+                    s.generate_template(self.width, self.height)
+
                 sets[s.name] = s
         
         self.sets = sets
+        self.selected_set = iter(copy.deepcopy(setlist[0]))
 
     def __init__(self, setlist, dimensions=(600,600), iterations=250, colormap='hot', title='Set Viewer', max_interval_delay=1000):
         colormaps = plt.colormaps()
@@ -69,14 +74,14 @@ class SetViewer(object):
         if dimensions[1] < SetViewer.MIN_HEIGHT:
             raise SetViewer.MinimumHeightExceeded('SetViewer height cannot be less than %d pixels.' % SetViewer.MIN_HEIGHT)
 
-        self.__init_sets(setlist)
-
         self.dpi = 100
         self.width = dimensions[0]
         self.height = dimensions[1]
         self.figwidth = self.width / 100
         self.figheight = self.height / 100
         self.figure = plt.figure(figsize=(self.figwidth, self.figheight), dpi=self.dpi)
+
+        self.__init_sets(setlist)
 
         # For depth of zoom on canvas
         self.zoom_level = 0
@@ -86,6 +91,7 @@ class SetViewer(object):
 
         # To track where tkinter is during the generation process
         self.after_id = None
+
         self.__init_GUI(iterations, colormap, title, max_interval_delay, colormaps)
 
     def __init_GUI(self, iterations, colormap, title, max_interval_delay, colormaps):
@@ -172,7 +178,7 @@ class SetViewer(object):
         self.set_list_label = tk.Label(self.set_group, text='Set:')
         self.set_list_label.grid(row=0, column=0, padx=(0, 8))
         self.set_list = ttk.Combobox(self.set_group, values=list(self.sets.keys()), state='readonly', width=12)
-        self.set_list.bind("<<ComboboxSelected>>",lambda e: self.root.focus())
+        self.set_list.bind("<<ComboboxSelected>>", self.set_list_changed)
         self.set_list.grid(row=0, column=1)
         self.set_list.current(0)
         self.set_group.grid(row=2, column=0, pady=8)
@@ -186,12 +192,13 @@ class SetViewer(object):
         self.generation_frame.grid(row=4, column=0)
 
         # Generate button
-        self.generate_button = tk.Button(self.generation_frame, text='Generate', padx=20, command=self.generate)
+        self.generate_button = tk.Button(self.generation_frame, text='Generate', padx=20, command=self.generate_wrapper)
         self.generate_button.grid(row=0, column=0, pady=8, padx=4)
 
-        # Stop generation button
-        self.cancel_button = tk.Button(self.generation_frame, text='Cancel', padx=20, command=self.stop_generation)
-        self.cancel_button.grid(row=0, column=1, pady=8, padx=4)
+        # Pause generation button
+        self.pause_button = tk.Button(self.generation_frame, padx=20, command=self.pause_generation, text='Pause')
+        self.pause_button['state'] = 'disabled'
+        self.pause_button.grid(row=0, column=1, pady=8, padx=4)
 
     def __load_picture_section(self, colormaps, colormap):
 
@@ -227,12 +234,9 @@ class SetViewer(object):
         self.xy_frame = tk.LabelFrame(self.sidepanel, text='XY Coordinate Range')
         self.xy_frame.columnconfigure(0, minsize=SetViewer.SIDEPANEL_WIDTH - 40)
         self.xy_frame.grid(row=2, column=0)
-
-        # Use this to get the min/max range of the default selected set
-        selected_set = self.sets[self.set_list.get()]
         
         # Validate entry command
-        vdbl = (self.root.register(self.validate_range_entries), '%S', '%P')
+        vdbl = (self.root.register(self.range_entry_handler), '%S', '%P')
 
         # X range frame
         self.x_frame = tk.LabelFrame(self.xy_frame, bd=0)
@@ -247,7 +251,7 @@ class SetViewer(object):
         self.min_x_label.grid(row=0, column=0)
 
         # Min x entry
-        min_x = selected_set.get_coord_range().get_xRange()[0]
+        min_x = self.selected_set.get_coord_range().get_xRange()[0]
         self.min_x_entry = tk.Entry(self.min_x_frame, width=8, validate='key', validatecommand=vdbl)
         self.min_x_entry.insert(0, str(min_x))
         self.min_x_entry.grid(row=0, column=1)
@@ -261,7 +265,7 @@ class SetViewer(object):
         self.max_x_label.grid(row=0, column=0)
 
         # Max x entry
-        max_x = selected_set.get_coord_range().get_xRange()[1]
+        max_x = self.selected_set.get_coord_range().get_xRange()[1]
         self.max_x_entry = tk.Entry(self.max_x_frame, width=8, validate='key', validatecommand=vdbl)
         self.max_x_entry.insert(0, str(max_x))
         self.max_x_entry.grid(row=0, column=1)
@@ -279,7 +283,7 @@ class SetViewer(object):
         self.min_y_label.grid(row=0, column=0)
 
         # Min y entry
-        min_y = selected_set.get_coord_range().get_yRange()[0]
+        min_y = self.selected_set.get_coord_range().get_yRange()[0]
         self.min_y_entry = tk.Entry(self.min_y_frame, width=8, validate='key', validatecommand=vdbl)
         self.min_y_entry.insert(0, str(min_y))
         self.min_y_entry.grid(row=0, column=1)
@@ -293,7 +297,7 @@ class SetViewer(object):
         self.max_y_label.grid(row=0, column=0)
 
         # Max y entry
-        max_y = selected_set.get_coord_range().get_yRange()[1]
+        max_y = self.selected_set.get_coord_range().get_yRange()[1]
         self.max_y_entry = tk.Entry(self.max_y_frame, width=8, validate='key', validatecommand=vdbl)
         self.max_y_entry.insert(0, str(max_y))
         self.max_y_entry.grid(row=0, column=1)
@@ -324,11 +328,9 @@ class SetViewer(object):
         elif btn_pressed == 'MouseButton.RIGHT':
             self.zoom_level -= 1
         
-        selected_set = self.sets[self.set_list.get()]
-        
         # Some zoom math
-        x_range = selected_set.get_coord_range().get_xRange()
-        y_range = selected_set.get_coord_range().get_yRange()
+        x_range = self.selected_set.get_coord_range().get_xRange()
+        y_range = self.selected_set.get_coord_range().get_yRange()
         x_len = abs(x_range[1] - x_range[0])
         y_len = abs(y_range[1] - y_range[0])
         rel_x = x_range[0] + x_len * (event.x / self.width)
@@ -337,9 +339,9 @@ class SetViewer(object):
 
         new_crange = crange(rel_x - rel_zoom, rel_x + rel_zoom, rel_y - rel_zoom, rel_y + rel_zoom)
         self.update_xyrange_entries(new_crange)
-        self.generate()
+        self.generate_wrapper()
 
-    def validate_range_entries(self, key, entry):
+    def range_entry_handler(self, key, entry):
         try:
             float(entry)
         except:
@@ -367,59 +369,75 @@ class SetViewer(object):
         if not path.exists(SetViewer.SAVE_DIRECTORY):
             makedirs(SetViewer.SAVE_DIRECTORY)
         
-        selected_set = self.sets[self.set_list.get()]
         current_time = time.strftime("%Y-%m-%d %I %M %p")
-        plt.savefig(SetViewer.SAVE_DIRECTORY + '/%s Set - %s' % (selected_set.name, current_time))
+        plt.savefig(SetViewer.SAVE_DIRECTORY + '/%s Set - %s' % (self.selected_set.name, current_time))
     
+    def set_list_changed(self):
+        self.root.focus()
+
     def animation_checkbox_clicked(self):
         self.animation_check_val.set(not self.animation_check_val.get())
+        self.stop_generation(clear=False)
     
     def color_map_changed(self, *args):
-        selected_set = self.sets[self.set_list.get()]
-        if selected_set.set is not None:
+        if self.selected_set.get_set() is not None:
             selected_cmap = self.color_map_list.get()
-            self.figure.clear()
-            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap, origin='lower')
+            self.update_canvas(cmap=selected_cmap)
             self.canvas.draw()
-            
-    def render(self, frame, *fargs):
+    
+    def update_canvas(self, cmap):
+        self.figure.clear()
+        self.figure.figimage(self.selected_set.get_set()['divergence'], cmap=cmap, origin='lower')
+
+    def render(self, frame):
         """ Callback for every frame in animation """
         if self.animation_check_val.get():
             selected_cmap = self.color_map_list.get()
-            selected_set, set_, maxIters = fargs
             
             # Dynamically update animation delay every frame
             delay = self.interval_slider.get()
             self.anim.event_source.interval = delay
 
-            selected_set.set = set_.__next__()[0]
-            self.figure.clear()
-            self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap, origin='lower')
-            self.progress_bar['value'] = math.ceil(((frame + 1) / maxIters) * 100)
-
-            if (frame + 2) >= maxIters:
-                self.progress_bar['value'] = 0
-
-            self.root.update_idletasks()
-
+            try:
+                self.selected_set.__next__()
+                self.update_canvas(cmap=selected_cmap)
+                self.update_progress()
+            except StopIteration:
+                selected_cmap = self.color_map_list.get()
+                self.update_canvas(cmap=selected_cmap)
+                self.canvas.draw()
+                self.stop_generation()
+                self.pause_button['state'] = 'disabled'
+                self.pause_button['text'] = 'Pause'
         else:
             self.anim.event_source.stop()
-            self.anim = None
     
-    def stop_generation(self):
+    def continue_generation(self):
+        self.generate_wrapper(reset=False)
+
+    def pause_generation(self):
+        clear = True if self.selected_set.get_current_iteration() >= self.selected_set.get_iterations() else False
+        selected_cmap = self.color_map_list.get()
+
+        self.stop_generation(clear=clear)
+        self.pause_button.config(command=self.continue_generation)
+        self.pause_button['text'] = 'Continue'
+        self.update_canvas(cmap=selected_cmap)
+        if not self.animation_check_val.get():
+            self.canvas.draw()
+        
+    def stop_generation(self, clear=True):
         # Check if a set is currently being generated
         if self.after_id is not None:
              self.root.after_cancel(self.after_id)
-             self.after_id = None
         
         # Stop animation on button click
         if self.anim is not None:
             self.anim.event_source.stop()
-            self.anim = None
 
-    def generate(self):
-        """ Handler for the generate button. """
+        self.update_progress(clear=clear)
 
+    def validate_range_entries(self):
         coords = None
         try:
             minX = float(self.min_x_entry.get())
@@ -434,44 +452,54 @@ class SetViewer(object):
             tk.messagebox.showerror(title='Value Error', message="Invalid XY Range values.")
             return
         
-        selected_set = self.sets[self.set_list.get()]
-        maxIters = self.iteration_slider.get()
-        set_ = iter(selected_set)
+        return coords
+
+    def update_progress(self, clear=False):
+        if clear:
+            self.progress_bar['value'] = 0
+        else:
+            self.progress_bar['value'] = (self.selected_set.get_current_iteration() / self.selected_set.get_iterations()) * 100
+
+        self.root.update_idletasks()
         
-        # Required helper function to prevent GUI lockup
-        def generate_(i=0):
-            if i < maxIters:
-                delay = self.interval_slider.get()
-                selected_set.set = set_.__next__()[0]
-                self.progress_bar['value'] = (i / maxIters) * 100
-                self.root.update_idletasks()
-                self.after_id = self.root.after(delay, lambda: generate_(i+1))
-            else:
-                selected_cmap = self.color_map_list.get()
-
-                self.figure.clear()
-                self.figure.figimage(selected_set.set['divergence'], cmap=selected_cmap, origin='lower')
-                self.progress_bar['value'] = 0
-                self.canvas.draw()
-                self.after_id = None
-
+    def generate(self):
+        try:
+            delay = self.interval_slider.get()
+            self.selected_set.__next__()
+            self.update_progress()
+            self.after_id = self.root.after(delay, self.generate)
+        except StopIteration:
+            selected_cmap = self.color_map_list.get()
+            self.stop_generation()
+            self.update_canvas(cmap=selected_cmap)
+            self.canvas.draw()
+            self.pause_button['state'] = 'disabled'
+            self.pause_button['text'] = 'Pause'
+            
+    def generate_wrapper(self, reset=True):
+        """ Handler for the generate button. """
+        self.pause_button.config(command=self.pause_generation)
+        self.pause_button['state'] = 'active'
+        self.pause_button['text'] = 'Pause'
         self.stop_generation()
 
-        if selected_set.get_template() is None:
-            selected_set.generate_template(self.width, self.height)
-        
-        selected_set.set_coord_range(coords)
+        coords = self.validate_range_entries()
+        maxIters = self.iteration_slider.get()
+
+        if reset:
+            selected_set = copy.deepcopy(self.sets[self.set_list.get()])
+            selected_set.set_coord_range(coords)
+            selected_set.set_iterations(maxIters)
+            self.selected_set = iter(selected_set)
         
         # Check for animation enabled
         if self.animation_check_val.get():
             delay = self.interval_slider.get()
-            self.anim = anim.FuncAnimation(self.figure, self.render, interval=delay, frames=maxIters, repeat=False, blit=False, 
-                                            fargs=(selected_set, set_, maxIters), cache_frame_data=False)
+            self.anim = anim.FuncAnimation(self.figure, self.render, interval=delay, 
+                                            repeat=False, blit=False, cache_frame_data=False)
             self.canvas.draw()
-
-        # Run standard generation without animation if animation is disabled
         else:
-            generate_()
+            self.generate()
                 
     def show(self):
         self.root.mainloop()

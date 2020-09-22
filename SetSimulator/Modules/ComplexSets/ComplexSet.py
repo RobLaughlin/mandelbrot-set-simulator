@@ -57,11 +57,14 @@ class ComplexSet(ABC):
     def set_name(self, name):
         self.name = name
     
-    def get_template(self):
-        return self.set_template
-    
     def get_set(self):
         return self.set
+    
+    def update_set(self, set_):
+        self.set = set_
+    
+    def get_current_iteration(self):
+        return self.current_iteration
     
     def get_coord_range(self):
         return self.coord_range
@@ -81,13 +84,18 @@ class ComplexSet(ABC):
     def set_iterations(self, iterations:int):
         self.max_iterations = iterations
     
+    def clear_set(self):
+        self.set = None
+        self.current_iteration = 0
+
     @abstractmethod
     def __iter__(self):
-        """ Method to be overridden by implementation """
-        while False:
-            yield None
-    
+        pass
+
+    @abstractmethod
+    def __next__(self):
+        pass
+
     @abstractmethod
     def generate_set(self):
-        """ Method to be overridden by implementation """
         pass
