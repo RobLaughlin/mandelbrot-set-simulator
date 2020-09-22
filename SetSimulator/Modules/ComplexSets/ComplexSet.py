@@ -1,6 +1,6 @@
 from .CoordinateRange import CoordinateRange
 import numpy as np
-from abc import ABC, abstractmethod
+from abc import ABC, abstractclassmethod
 
 class ComplexSet(ABC):
     class TemplateNotGenerated(Exception):
@@ -88,14 +88,14 @@ class ComplexSet(ABC):
         self.set = None
         self.current_iteration = 0
 
-    @abstractmethod
+    @abstractclassmethod
     def __iter__(self):
         pass
 
-    @abstractmethod
+    @abstractclassmethod
     def __next__(self):
         pass
 
-    @abstractmethod
+    @abstractclassmethod
     def generate_set(self):
         pass
