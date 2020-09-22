@@ -6,11 +6,8 @@ from matplotlib import pyplot as plt
 from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
-import matplotlib.animation as anim
 import webbrowser
-import math
-import time
-import copy
+
 from ...ComplexSets.CoordinateRange import CoordinateRange as crange
 
 class BaseGUI(ABC):
