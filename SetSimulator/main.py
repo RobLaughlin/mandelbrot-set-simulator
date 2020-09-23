@@ -24,6 +24,13 @@ def init():
         xmax = set_template['xRange']['max']
         ymin = set_template['yRange']['min']
         ymax = set_template['yRange']['max']
+
+        if viewer['maintain_aspect_ratio']:
+            ratio = width / height
+            pad = ((ratio - 1) * (xmax - xmin)) / 2
+            xmin -= pad
+            xmax += pad
+        
         crange = CoordinateRange(xmin, xmax, ymin, ymax)
         mset = Mandelbrot(iterations=max_iterations, coord_range=crange)
         sets = [mset]

@@ -50,6 +50,7 @@ class SetViewer(BaseGUI):
 
         # To track where tkinter is during the generation process
         self.after_id = None
+        
         # Set zoom handler
         self.canvas.mpl_connect('button_press_event', self.canvas_onclick)
 

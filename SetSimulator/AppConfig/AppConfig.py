@@ -62,6 +62,7 @@ class AppConfig(object):
             self.config['defaults']['viewer']['dimensions']
             self.config['defaults']['viewer']['dimensions']['width']
             self.config['defaults']['viewer']['dimensions']['height']
+            self.config['defaults']['viewer']['maintain_aspect_ratio']
         except KeyError:
             raise KeyError('Invalid configuration file. Make sure all necessary keys and values are included in the config file.')
 
