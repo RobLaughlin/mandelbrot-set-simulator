@@ -220,14 +220,15 @@ class SetViewer(BaseGUI):
         self.pause_button['text'] = 'Pause'
         self.stop_generation()
 
+        selected_set = self.sets[self.set_list.get()]
         coords = self.validate_range_entries()
         maxIters = self.iteration_slider.get()
-
+        selected_set.set_coord_range(coords)
+        selected_set.set_iterations(maxIters)
+        
         if reset:
-            selected_set = copy.deepcopy(self.sets[self.set_list.get()])
-            selected_set.set_coord_range(coords)
-            selected_set.set_iterations(maxIters)
-            self.selected_set = iter(selected_set)
+            new_set = copy.deepcopy(selected_set)
+            self.selected_set = iter(new_set)
         
         # Check for animation enabled
         if self.animation_check_val.get():

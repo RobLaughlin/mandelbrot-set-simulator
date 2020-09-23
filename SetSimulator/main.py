@@ -20,17 +20,17 @@ def init():
         # Set config
         set_template = config['defaults']['set']
         max_iterations = set_template['maxIterations']
-        xmin = set_template['xRange']['min']
-        xmax = set_template['xRange']['max']
-        ymin = set_template['yRange']['min']
-        ymax = set_template['yRange']['max']
+        xmin = float(set_template['xRange']['min'])
+        xmax = float(set_template['xRange']['max'])
+        ymin = float(set_template['yRange']['min'])
+        ymax = float(set_template['yRange']['max'])
 
         if viewer['maintain_aspect_ratio']:
             ratio = width / height
             pad = ((ratio - 1) * (xmax - xmin)) / 2
             xmin -= pad
             xmax += pad
-        
+
         crange = CoordinateRange(xmin, xmax, ymin, ymax)
         mset = Mandelbrot(iterations=max_iterations, coord_range=crange)
         sets = [mset]
