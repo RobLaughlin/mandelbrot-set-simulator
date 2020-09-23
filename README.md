@@ -24,6 +24,11 @@ To run the simulation,
 ```python
 python main.py
 ```
+To build a single file executable,
+```python
+python build.py
+```
+
 Left-click to zoom in and right-click to zoom out. The more delay (MS) set within the GUI, the more lag introduced between each frame of animation. Lowering the delay nets a more smooth animation with higher tendency to lockup the GUI, so set the delay according to system specifications. Higher delay is recommended with higher resolution simulations. Have fun!
 
 ## License
