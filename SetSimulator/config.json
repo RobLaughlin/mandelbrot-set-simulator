@@ -10,14 +10,18 @@
             "yRange": {
                 "min": -3,
                 "max": 3
+            },
+            "julia_constant": {
+                "real": 0,
+                "imag": -0.8
             }
         },
         "viewer": {
             "title": "Set Simulator",
             "colormap": "coolwarm",
             "dimensions": {
-                "width": 600,
-                "height": 600
+                "width": 650,
+                "height": 650
             },
             "max_animation_frame_delay": 500,
             "maintain_aspect_ratio": true

@@ -28,14 +28,16 @@ class BaseGUI(ABC):
     SAVE_DIRECTORY = 'images'
 
     # Required for UI scaling
-    MIN_WIDTH = 600
-    MIN_HEIGHT = 600
+    MIN_WIDTH = 650
+    MIN_HEIGHT = 650
     SIDEPANEL_WIDTH = 250
 
     # Required to prevent UI lockup in animation
     MIN_FRAME_DELAY = 1
     
-    def __init__(self, sets, coord_range:crange, dimensions=(600,600), iterations=250, colormap='hot', title='Set Viewer', max_interval_delay=1000):
+    def __init__(self, sets, coord_range:crange, dimensions=(600,600), iterations=250, 
+                colormap='hot', title='Set Viewer', max_interval_delay=1000, julia_constant=1j):
+        
         colormaps = plt.colormaps()
         if colormap not in colormaps:
             raise BaseGUI.ColorMapNotIncluded('Color map "%s" is not included in the Matplotlib list of color maps.' % colormap)
@@ -52,7 +54,6 @@ class BaseGUI(ABC):
         self.figwidth = self.width / 100
         self.figheight = self.height / 100
         self.figure = plt.figure(figsize=(self.figwidth, self.figheight), dpi=self.dpi)
-        """ Ugly monolithic GUI code (most of which is the sidebar) """
 
         if not path.exists(BaseGUI.SIMULATOR_ICON):
             raise FileNotFoundError('%s File not found.' % BaseGUI.SIMULATOR_ICON)
@@ -76,10 +77,11 @@ class BaseGUI(ABC):
         self.__load_simulation_section(iterations, max_interval_delay, sets)
         self.__load_picture_section(colormaps, colormap)
         self.__load_xyrange_section(coord_range)
+        self.__load_julia_set_UI(julia_constant)
 
         # Close button
         self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
-        self.close_button.grid(row=3, column=0, pady=16, sticky='S')
+        self.close_button.grid(row=4, column=0, pady=8, sticky='S')
         
         # Load default set figure
         self.load_default_figure()
@@ -92,7 +94,7 @@ class BaseGUI(ABC):
         gh_img = ImageTk.PhotoImage(img, master=self.sidepanel)
         self.gh_button = tk.Button(self.sidepanel, image=gh_img, border=1, command=lambda: webbrowser.open(BaseGUI.GITHUB_URL))
         self.gh_button.image = gh_img
-        self.gh_button.grid(row=4, column=0, sticky='S')
+        self.gh_button.grid(row=5, column=0, sticky='S')
     
     def __load_simulation_section(self, iterations, max_interval_delay, sets):
 
@@ -255,6 +257,43 @@ class BaseGUI(ABC):
         self.max_y_entry = tk.Entry(self.max_y_frame, width=8, validate='key', validatecommand=vdbl)
         self.max_y_entry.insert(0, str(max_y))
         self.max_y_entry.grid(row=0, column=1)
+    
+    def __load_julia_set_UI(self, julia_constant):
+
+        # Julia set constant label frame
+        self.julia_constant_frame = tk.LabelFrame(self.sidepanel, text='Julia Constant')
+        self.julia_constant_frame.columnconfigure(0, minsize=BaseGUI.SIDEPANEL_WIDTH - 40)
+        self.julia_constant_frame.grid(row=3, column=0)
+        self.julia_constant_frame.grid_forget()
+
+        # Real part label frame
+        self.real_part_frame = tk.LabelFrame(self.julia_constant_frame, bd=0)
+        self.real_part_frame.grid(row=0, column=0)
+
+        # Real part label
+        self.real_part_label = tk.Label(self.real_part_frame, text='Real:')
+        self.real_part_label.grid(row=0, column=0, sticky='SW')
+
+        # Real part slider
+        self.real_part_slider = tk.Scale(self.real_part_frame, from_=-2, to=2, orient=tk.HORIZONTAL, 
+                                        digits=8, resolution=0.000001, command=self.real_part_changed)
+        self.real_part_slider.set(julia_constant.real)
+        self.real_part_slider.grid(row=0, column=1)
+
+        # Imag part label frame
+        self.imag_part_frame = tk.LabelFrame(self.julia_constant_frame, bd=0)
+        self.imag_part_frame.grid(row=1, column=0)
+
+        # Imag part label
+        self.imag_part_label = tk.Label(self.imag_part_frame, text='Imag:')
+        self.imag_part_label.grid(row=0, column=0, sticky='SW')
+
+        # Imag part slider
+        self.imag_part_slider = tk.Scale(self.imag_part_frame, from_=-2, to=2, orient=tk.HORIZONTAL, 
+                                        digits=8, resolution=0.000001, command=self.imag_part_changed)
+        self.imag_part_slider.set(julia_constant.imag)
+        self.imag_part_slider.grid(row=0, column=1)
+
 
     def load_default_figure(self):
         """ Load the null set image into figure when the GUI loads """
@@ -293,6 +332,14 @@ class BaseGUI(ABC):
 
     @abstractclassmethod
     def range_entry_handler(self):
+        pass
+
+    @abstractclassmethod
+    def real_part_changed(self):
+        pass
+
+    @abstractclassmethod
+    def imag_part_changed(self):
         pass
 
     @abstractclassmethod

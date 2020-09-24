@@ -12,7 +12,6 @@ import copy
 
 from ..ComplexSets.ComplexSet import ComplexSet as Set
 from ..ComplexSets.CoordinateRange import CoordinateRange as crange 
-from ..ComplexSets.Sets.Mandelbrot import Mandelbrot
 from .BaseGUI.BaseGUI import BaseGUI
 
 class SetViewer(BaseGUI):
@@ -38,9 +37,11 @@ class SetViewer(BaseGUI):
         self.sets = sets
         self.selected_set = iter(copy.deepcopy(setlist[0]))
 
-    def __init__(self, setlist, dimensions=(600,600), iterations=250, colormap='hot', title='Set Viewer', max_interval_delay=1000, maintain_ratio=True):
+    def __init__(self, setlist, dimensions=(600,600), iterations=250, colormap='hot', title='Set Viewer', 
+                max_interval_delay=1000, maintain_ratio=True, julia_constant=1j):
+        
         self.__init_sets(setlist, dimensions)
-        super().__init__(self.sets, setlist[0].get_coord_range(), dimensions, iterations, colormap, title, max_interval_delay)
+        super().__init__(self.sets, setlist[0].get_coord_range(), dimensions, iterations, colormap, title, max_interval_delay, julia_constant)
         
         self.maintain_ratio = maintain_ratio
 
@@ -79,7 +80,7 @@ class SetViewer(BaseGUI):
         if btn_pressed == 'MouseButton.LEFT':
             m = 0.25
         elif btn_pressed == 'MouseButton.RIGHT':
-            m = 2
+            m = 3
         
         # Some zoom math
         x_range = self.selected_set.get_coord_range().get_xRange()
@@ -119,9 +120,14 @@ class SetViewer(BaseGUI):
         current_time = time.strftime("%Y-%m-%d %I %M %p")
         plt.savefig(SetViewer.SAVE_DIRECTORY + '/%s Set - %s' % (self.selected_set.name, current_time))
     
-    def set_list_changed(self):
+    def set_list_changed(self, e):
         self.root.focus()
-
+        selected_set = self.sets[self.set_list.get()]
+        if selected_set.name == 'Julia':
+            self.julia_constant_frame.grid(row=3, column=0)
+        else:
+            self.julia_constant_frame.grid_forget()
+        
     def animation_checkbox_clicked(self):
         self.animation_check_val.set(not self.animation_check_val.get())
         self.stop_generation(clear=False)
@@ -135,6 +141,20 @@ class SetViewer(BaseGUI):
     def update_canvas(self, cmap):
         self.figure.clear()
         self.figure.figimage(self.selected_set.get_set()['divergence'], cmap=cmap, origin='lower')
+
+    def real_part_changed(self, e):
+        selected_set = self.sets[self.set_list.get()]
+        real_val = float(self.real_part_slider.get())
+        if selected_set.name == 'Julia':
+            selected_set.update_constant(real_val + (selected_set.get_constant().imag * 1j))
+            self.generate_wrapper()
+        
+    def imag_part_changed(self, e):
+        selected_set = self.sets[self.set_list.get()]
+        imag_val = float(self.imag_part_slider.get())
+        if selected_set.name == 'Julia':
+            selected_set.update_constant(selected_set.get_constant().real + (imag_val * 1j))
+            self.generate_wrapper()
 
     def render(self, frame):
         """ Callback for every frame in animation """
@@ -247,6 +267,6 @@ class SetViewer(BaseGUI):
             self.canvas.draw()
         else:
             self.generate()
-                
+
     def show(self):
         self.root.mainloop()

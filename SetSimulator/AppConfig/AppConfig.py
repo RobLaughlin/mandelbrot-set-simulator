@@ -55,6 +55,10 @@ class AppConfig(object):
             self.config['defaults']['set']['yRange']['min']
             self.config['defaults']['set']['yRange']['max']
 
+            self.config['defaults']['set']['julia_constant']
+            self.config['defaults']['set']['julia_constant']['real']
+            self.config['defaults']['set']['julia_constant']['imag']
+            
             self.config['defaults']['viewer']
             self.config['defaults']['viewer']['max_animation_frame_delay']
             self.config['defaults']['viewer']['title']

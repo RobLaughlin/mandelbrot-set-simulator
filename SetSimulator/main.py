@@ -1,4 +1,4 @@
-from Modules.ComplexSets.Sets import Mandelbrot
+from Modules.ComplexSets.Sets import Mandelbrot, Julia
 from Modules.ComplexSets import CoordinateRange
 from Modules.SetViewer import SetViewer
 from AppConfig import AppConfig as Config
@@ -30,11 +30,13 @@ def init():
             pad = ((ratio - 1) * (xmax - xmin)) / 2
             xmin -= pad
             xmax += pad
-
+        
+        julia_constant = set_template['julia_constant']['real'] + set_template['julia_constant']['imag'] * 1j
         crange = CoordinateRange(xmin, xmax, ymin, ymax)
         mset = Mandelbrot(iterations=max_iterations, coord_range=crange)
-        sets = [mset]
-        viewer = SetViewer(setlist=sets, title=title, colormap=colormap, iterations=max_iterations, 
+        jset = Julia(iterations=max_iterations, coord_range=crange, constant=julia_constant)
+        sets = [mset, jset]
+        viewer = SetViewer(setlist=sets, title=title, colormap=colormap, iterations=max_iterations, julia_constant=julia_constant, 
                             dimensions=(width, height), max_interval_delay=max_anim_frame_delay, maintain_ratio=viewer['maintain_aspect_ratio'])
         viewer.show()
 
