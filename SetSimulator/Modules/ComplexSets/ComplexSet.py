@@ -88,9 +88,19 @@ class ComplexSet(ABC):
         self.set = None
         self.current_iteration = 0
 
-    @abstractclassmethod
     def __iter__(self):
-        pass
+        if (self.xVals is None or self.yVals is None) and self.set_template is None:
+            raise Mandelbrot.TemplateNotGenerated("Arguments 'xVals' and 'yVals' must be provided if a set template has not yet been generated")
+        
+        if (self.xVals is not None and self.yVals is not None):
+            self.generate_template(self.xVals, self.yVals)
+        elif (self.xVals is not None and self.yVals is None) or (self.xVals is None and self.yVals is not None):
+            raise ValueError("Cannot have only one argument for 'xVals' and 'yVals'")
+        
+        self._Z = np.zeros_like(self.set_template)
+        self._Z_Mask = np.ones_like(self.set_template, dtype=bool)
+
+        return self
 
     @abstractclassmethod
     def __next__(self):
