@@ -16,7 +16,7 @@
             "title": "Set Simulator",
             "colormap": "coolwarm",
             "dimensions": {
-                "width": 600,
+                "width": 1200,
                 "height": 600
             },
             "max_animation_frame_delay": 500,

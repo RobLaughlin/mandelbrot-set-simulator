@@ -38,12 +38,11 @@ class SetViewer(BaseGUI):
         self.sets = sets
         self.selected_set = iter(copy.deepcopy(setlist[0]))
 
-    def __init__(self, setlist, dimensions=(600,600), iterations=250, colormap='hot', title='Set Viewer', max_interval_delay=1000):
+    def __init__(self, setlist, dimensions=(600,600), iterations=250, colormap='hot', title='Set Viewer', max_interval_delay=1000, maintain_ratio=True):
         self.__init_sets(setlist, dimensions)
         super().__init__(self.sets, setlist[0].get_coord_range(), dimensions, iterations, colormap, title, max_interval_delay)
         
-        # For depth of zoom on canvas
-        self.zoom_level = 0
+        self.maintain_ratio = maintain_ratio
 
         # Animation source for the set being generated
         self.anim = None
@@ -72,24 +71,35 @@ class SetViewer(BaseGUI):
 
     def canvas_onclick(self, event):
         """ Handler for clicking the set canvas """
+        
+        # Zoom multiplier
+        m = 1
 
-        # Handle which button was pressed
         btn_pressed = str(event.button)
         if btn_pressed == 'MouseButton.LEFT':
-            self.zoom_level += 1
+            m = 0.25
         elif btn_pressed == 'MouseButton.RIGHT':
-            self.zoom_level -= 1
+            m = 2
         
         # Some zoom math
         x_range = self.selected_set.get_coord_range().get_xRange()
         y_range = self.selected_set.get_coord_range().get_yRange()
         x_len = abs(x_range[1] - x_range[0])
         y_len = abs(y_range[1] - y_range[0])
-        rel_x = x_range[0] + x_len * (event.x / self.width)
-        rel_y = y_range[0] + y_len * (event.y / self.height)
-        rel_zoom = (0.5**self.zoom_level)
+        rel_x = x_range[0] + (x_len) * (event.x / self.width)
+        rel_y = y_range[0] + (y_len) * (event.y / self.height)
+        pad_x = (m * x_len)
+        pad_y = (m * y_len)
 
-        new_crange = crange(rel_x - rel_zoom, rel_x + rel_zoom, rel_y - rel_zoom, rel_y + rel_zoom)
+        if self.maintain_ratio:
+            r = self.width / self.height
+            pad_x *= r
+            pad_y *= r
+
+        pad_x /= 2
+        pad_y /= 2
+
+        new_crange = crange(rel_x - pad_x, rel_x + pad_x, rel_y - pad_y, rel_y + pad_y)
         self.update_xyrange_entries(new_crange)
         self.generate_wrapper()
 
@@ -188,7 +198,6 @@ class SetViewer(BaseGUI):
         except ValueError:
             tk.messagebox.showerror(title='Value Error', message="Invalid XY Range values.")
             return
-        
         return coords
 
     def update_progress(self, clear=False):
