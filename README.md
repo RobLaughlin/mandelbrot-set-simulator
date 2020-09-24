@@ -16,8 +16,6 @@ Notice how the color changes as we zoom into the set. Every black pixel is a com
 
 Complex numbers colored orange took longer to diverge than complex numbers colored red, yellow longer than orange, green longer than yellow, etc, until the end of the spectrum (maximum recursions). This depends entirely on the color map selected in the GUI. The set simulator has since been updated to handle many different colormaps included by matplotlib.
 
-At the moment the set simulator only handles the Mandelbrot set, with plans to include the Julia set(s) in the near future, and possibly even other complex iterative sets.
-
 ## Usage
 
 To run the simulation,
