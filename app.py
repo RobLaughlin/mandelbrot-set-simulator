@@ -1,13 +1,11 @@
+import json
 from Modules.ComplexSets.Sets import Mandelbrot, Julia
 from Modules.ComplexSets import CoordinateRange
 from Modules.SetViewer import SetViewer
-from AppConfig import AppConfig as Config
 
 def init():
-    conf = Config('config.json')
-
-    if conf.validate():
-        config = conf.get_config()
+    try:
+        config = json.load(open('config.json', 'r'))
 
         # Viewer config
         viewer = config['defaults']['viewer']
@@ -40,6 +38,9 @@ def init():
         viewer = SetViewer(setlist=sets, title=title, colormap=colormap, iterations=max_iterations, julia_constant=julia_constant, 
                             dimensions=(width, height), max_interval_delay=max_anim_frame_delay, maintain_ratio=viewer['maintain_aspect_ratio'])
         viewer.show()
+    
+    except:
+        print('Invalid configuration file.')
 
 if __name__ == '__main__':
     init()

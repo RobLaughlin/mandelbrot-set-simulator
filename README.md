@@ -20,7 +20,7 @@ Complex numbers colored orange took longer to diverge than complex numbers color
 
 To run the simulation,
 ```python
-python main.py
+python app.py
 ```
 To build a single file executable,
 ```python
