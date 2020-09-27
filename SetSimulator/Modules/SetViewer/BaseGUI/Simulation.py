@@ -116,10 +116,10 @@ class GenerationControlWidget(tk.Frame):
         
         """
         if continue_:
-            self._pause.text = 'Continue'
+            self._pause['text'] = 'Continue'
             self._pause.config(command=lambda: self._continue_handler(self._pause))
         else:
-            self._pause.text = 'Pause'
+            self._pause['text'] = 'Pause'
             self._pause.config(command=lambda: self._pause_handler(self._pause))
 
     

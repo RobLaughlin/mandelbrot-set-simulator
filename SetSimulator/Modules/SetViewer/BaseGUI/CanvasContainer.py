@@ -4,12 +4,14 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib import pyplot as plt
 from os import path
 from PIL import Image, ImageTk
+from typing import Callable
 
 class Canvas(FigureCanvasTkAgg):
     """Main canvas for viewing the complex set generation/image.
     
     Args:
         master (tkinter.widget): Parent container of the canvas.
+        handler (function(widget, event)): The event handler for the canvas click event.
         size (tuple) (int, int): Width and height of the canvas, respectively.
         fpath (str): File path of the default image to load onto the canvas.
         dpi (int, optional): DPI of the figure, default is 100.
@@ -20,13 +22,14 @@ class Canvas(FigureCanvasTkAgg):
         figure (matplotlib.pyplot.figure): Pyplot figure of the canvas.
     
     """
-    def __init__(self, master:tk.Widget, size:tuple, fpath:str, dpi=100):
+    def __init__(self, master:tk.Widget, handler:Callable, size:tuple, fpath:str, dpi=100):
         self._width = size[0]
         self._height = size[1]
         self._figure = plt.figure(figsize=(self._width / dpi, self._height / dpi), dpi=dpi)
         super().__init__(self._figure, master=master)
         self.load_default_figure(fpath)
-    
+        self.mpl_connect('button_press_event', lambda event: handler(self, event))
+
     @property
     def width(self) -> int:
         """int: Width of the canvas."""
@@ -69,6 +72,8 @@ class Canvas(FigureCanvasTkAgg):
         
         self.update(new_img)
     
-    def update(self, img:Image, cmap='gray', origin='lower'):
+    def update(self, img:Image, cmap='gray', origin='lower', redraw=False):
         self._figure.clear()
         self._figure.figimage(img, cmap=cmap, origin=origin)
+        if redraw:
+            self.draw()

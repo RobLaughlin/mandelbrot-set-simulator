@@ -91,10 +91,10 @@ class XYFrame(tk.LabelFrame):
         """
         coords = None
         try:
-            minX = float(self.x_range.min)
-            maxX = float(self.x_range.max)
-            minY = float(self.y_range.min)
-            maxY = float(self.y_range.max)
+            minX = float(self.x_range.min.val)
+            maxX = float(self.x_range.max.val)
+            minY = float(self.y_range.min.val)
+            maxY = float(self.y_range.max.val)
             coords = crange(minX, maxX, minY, maxY)
         except crange.InvalidCoordinateBounds as err:
             return err
@@ -105,8 +105,9 @@ class XYFrame(tk.LabelFrame):
     def update_all(self, coord_range:crange):
         x_range = coord_range.get_xRange()
         y_range = coord_range.get_yRange()
-        self._x_range.min = x_range[0]
-        self._x_range.max = x_range[1]
-        self._y_range.min = y_range[0]
-        self._y_range.max = y_range[1]
+
+        self._x_range.min.val = x_range[0]
+        self._x_range.max.val = x_range[1]
+        self._y_range.min.val = y_range[0]
+        self._y_range.max.val = y_range[1]
         return self.coord_range

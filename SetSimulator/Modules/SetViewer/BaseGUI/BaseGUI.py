@@ -104,9 +104,8 @@ class BaseGUI(ABC):
         # Main GUI components
         self.root = Root(kwargs['title'], new_dims, minwidth=BaseGUI.SIDEPANEL_WIDTH)
         self.root.icon = BaseGUI.SIMULATOR_ICON
-        self.canvas = Canvas(self.root, (dims[0], dims[1]), BaseGUI.DEFAULT_PNG, 100)
+        self.canvas = Canvas(self.root, self.canvas_onclick, (dims[0], dims[1]), BaseGUI.DEFAULT_PNG, 100)
         self.canvas.get_tk_widget().grid(row=0, column=1, sticky='E')
-        self.canvas.mpl_connect('button_press_event', lambda: self.canvas_onclick(self.canvas))
 
         # Validation function for coordinate range entries
         validate = (self.root.register(self.range_entry_handler), '%S', '%P')
@@ -192,7 +191,7 @@ class BaseGUI(ABC):
         pass
 
     @abstractclassmethod
-    def color_map_changed(self, widget, event):
+    def color_map_changed(self, widget):
         pass
     
     @abstractclassmethod
@@ -212,5 +211,5 @@ class BaseGUI(ABC):
         pass
 
     @abstractclassmethod
-    def canvas_onclick(self, canvas):
+    def canvas_onclick(self, widget, event):
         pass

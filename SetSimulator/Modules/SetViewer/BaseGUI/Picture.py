@@ -19,6 +19,7 @@ class AnimationCheckbox(tk.Checkbutton):
     def __init__(self, master:tk.Widget, handler:Callable, grid_index:tuple, checked_default=True):
         self._val = tk.BooleanVar(value=checked_default)
         super().__init__(master, text='Animation', command=lambda: handler(self), variable=self._val)
+        self.select() if checked_default else self.deselect()
         self.grid(row=grid_index[0], column=grid_index[1], sticky='W', padx=(16, 0))
 
     @property
@@ -29,7 +30,7 @@ class AnimationCheckbox(tk.Checkbutton):
     @val.setter
     def val(self, value:bool):
         self._val.set(value=value)
-        self.set(value)
+        self.select() if value else self.deselect()
 
 class ColormapWidget(LabeledWidget):
     """Colormap subcomponent.
@@ -50,7 +51,7 @@ class ColormapWidget(LabeledWidget):
         self.grid_configure(pady=4)
         self.label.grid_configure(padx=(0, 8))
         self.val = default_value
-        self.widget.bind("<<ComboboxSelected>>", lambda event: handler(self, event))
+        self.widget.bind("<<ComboboxSelected>>", lambda event: handler(self))
     
 class PictureWidget(tk.LabelFrame):
     """Picture (GUI) frame.

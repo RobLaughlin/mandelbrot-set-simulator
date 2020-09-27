@@ -31,9 +31,9 @@ class JuliaConstantWidget(tk.LabelFrame):
         grid_index (tuple) (int, int): The respective (row, column) position on the tkinter grid.
     
     Attributes:
-        real_part (juliaconstantwidget.juliacomplexpart): The real part widget of the Julia set constant.
-        imag_part (juliaconstantwidget.juliacomplexpart): The imaginary part widget of the Julia set constant.
-    
+        real (float): The value of the real part widget in the Julia set constant.
+        imag (float): The value of the imaginary part widget in the Julia set constant.
+        
     Widget Args:
         real_handler (function(JuliaComplexPart)): Event handler for when the real part widget is changed.
         real_range (tuple) (float, float): Respective minimum and maximum for the real range.
@@ -55,6 +55,16 @@ class JuliaConstantWidget(tk.LabelFrame):
         self._real_part = JuliaComplexPart(self, real_range, real_handler, 'Real:', (0, 0), default_value.real)
         self._imag_part = JuliaComplexPart(self, imag_range, imag_handler, 'Imag:', (1, 0), default_value.imag)
 
+    @property
+    def real(self) -> float:
+        """float: The value of the real_part component"""
+        return float(self._real_part.val)
+    
+    @property
+    def imag(self) -> float:
+        """float: The value of the imaginary_part component"""
+        return float(self._imag_part.val)
+    
     def hide(self):
         self.grid_remove()
     

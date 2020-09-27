@@ -51,6 +51,7 @@ class LabeledWidget(tk.Frame):
     @val.setter
     def val(self, value:object):
         if isinstance(self._widget, tk.Entry):
+            self._widget.delete(0, tk.END)
             self._widget.insert(0, str(value))
         
         if type(self._widget) is not tk.Entry:
