@@ -32,11 +32,11 @@ class BaseGUI(ABC):
     """Initialize the base GUI for the set simulator.
 
     Args:
-        sets (dict of str: int): Mapping of set names to Complex Set objects.
+        sets (dict[str, ComplexSets]): Mapping of set names to Complex Set objects.
         title (str): Title of the window.
         colormap (str): Default colormap to apply to the GUI figure.
         iterations (int): Max number of iterations to simulate.
-        dimensions (tuple): (width, height) used to initialize the root widget.
+        dimensions (tuple) (int, int): used to initialize the respective (width, height) of root widget.
         max_interval_delay (int): Max delay between frame animation.
         julia_constant (complex): (real, imag) specific constant to use for simulating the Julia set.
         coord_range (coordinaterange): the default coordinate range initialized in the GUI.
@@ -134,10 +134,10 @@ class BaseGUI(ABC):
                                 'imag_range': (-2, 2),
                                 'default_value': kwargs['julia_constant']}
 
-        #Sidepanel components/subcomponents
         self.sidepanel = Sidepanel(self.root, (0, 0))
         self.sidepanel.grid_configure(sticky='N')
 
+        #Sidepanel components/subcomponents
         simulation = SimulationSection(self.sidepanel, simulation_widget_config, minwidth)
         picture = Picture(self.sidepanel, picture_widget_config, minwidth)        
         xy_frame = XYFrame(self.sidepanel, xy_widget_config, minwidth)
@@ -161,12 +161,24 @@ class BaseGUI(ABC):
         if simulation.setlist.val != 'Julia':
             julia_constant.hide()
     
-    def set_list_changed(self, widget:ttk.Combobox):
+    def set_list_changed(self, widget:tk.Widget):
+        """Event handler for when a different set is selected from the set list.
+        
+        Args:
+            widget (tkinter.widget): The set list container widget.
+        
+        """
         self.root.focus()
         julia_constant = self.sidepanel.components['julia_constant']
         julia_constant.show() if widget.val == 'Julia' else julia_constant.hide()
 
     def save_btn_clicked(self, widget:tk.Button):
+        """Event handler for save button click.
+        
+        Args:
+            widget (tkinter.button): The save button.
+        
+        """
         if not path.exists(BaseGUI.SAVE_DIRECTORY):
             makedirs(BaseGUI.SAVE_DIRECTORY)
         
@@ -174,6 +186,16 @@ class BaseGUI(ABC):
         plt.savefig(BaseGUI.SAVE_DIRECTORY + '/%s Set - %s' % (self.sidepanel.components['simulation'].setlist.val, current_time))
     
     def range_entry_handler(self, key, entry):
+        """Validation function for each keystroke of a XY range entry.
+
+        Args:
+            key (str): What specific key was entered into the XY field.
+            entry (str): The full entry value of the XY field. 
+        
+        Returns:
+            bool: True if validation succeeds, False otherwise.
+        
+        """
         try:
             float(entry)
         except:
@@ -183,33 +205,82 @@ class BaseGUI(ABC):
         return True
 
     @abstractclassmethod
-    def pause_btn_clicked(self, widget):
+    def pause_btn_clicked(self, widget:tk.Widget):
+        """Event handler for pause button onclick. Overridden by implementation.
+        
+        Args:
+            widget (tkinter.widget): Widget container of what component triggered the event.
+        
+        """
         pass
     
     @abstractclassmethod
-    def continue_btn_clicked(self, widget):
+    def continue_btn_clicked(self, widget:tk.Button):
+        """Event handler for continue button onclick. Overridden by implementation.
+        
+        Args:
+            widget (tkinter.button): The button that triggered the onclick event.
+        
+        """
         pass
 
     @abstractclassmethod
-    def color_map_changed(self, widget):
+    def color_map_changed(self, widget:tk.Widget):
+        """Event handler for selected colormap change. Overridden by implementation.
+        
+        Args:
+            widget (tkinter.widget): Widget container of what component triggered the event.
+        
+        """
         pass
     
     @abstractclassmethod
-    def animation_checkbox_clicked(self, widget):
+    def animation_checkbox_clicked(self, widget:tk.Widget):
+        """Event handler for animation checkbox onclick. Overridden by implementation.
+        
+        Args:
+            widget (tkinter.widget): Widget container of what component triggered the event.
+        
+        """
         pass
 
     @abstractclassmethod
-    def real_part_changed(self, widget):
+    def real_part_changed(self, widget:tk.Widget):
+        """Event handler for the real part widget change. Overridden by implementation.
+        
+        Args:
+            widget (tkinter.widget): Widget container of what component triggered the event.
+        
+        """
         pass
 
     @abstractclassmethod
-    def imag_part_changed(self, widget):
+    def imag_part_changed(self, widget:tk.Widget):
+        """Event handler for the real part widget change. Overridden by implementation.
+        
+        Args:
+            widget (tkinter.widget): Widget container of what component triggered the event.
+        
+        """
         pass
 
     @abstractclassmethod
-    def generate_btn_clicked(self, widget):
+    def generate_btn_clicked(self, widget:tk.Button):
+        """Event handler for the generation button onclick. Overridden by implementation.
+        
+        Args:
+            widget (tkinter.button): The generation button.
+        
+        """
         pass
 
     @abstractclassmethod
-    def canvas_onclick(self, widget, event):
+    def canvas_onclick(self, widget:tk.Widget, event):
+        """Event handler for the canvas onclick. Overridden by implementation.
+        
+        Args:
+            widget (tkinter.widget): Widget container of what component triggered the event.
+            event (matplotlib.backend_bases.mouseevent): Event data regarding where on the canvas was clicked.
+        
+        """
         pass
