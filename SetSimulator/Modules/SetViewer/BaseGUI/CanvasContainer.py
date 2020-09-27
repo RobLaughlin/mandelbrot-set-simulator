@@ -27,6 +27,7 @@ class Canvas(FigureCanvasTkAgg):
         self._height = size[1]
         self._figure = plt.figure(figsize=(self._width / dpi, self._height / dpi), dpi=dpi)
         super().__init__(self._figure, master=master)
+
         self.load_default_figure(fpath)
         self.mpl_connect('button_press_event', lambda event: handler(self, event))
 
@@ -73,6 +74,15 @@ class Canvas(FigureCanvasTkAgg):
         self.update(new_img)
     
     def update(self, img:Image, cmap='gray', origin='lower', redraw=False):
+        """Update the canvas.
+
+        Args:
+            img (pil.image): Image to update the canvas with.
+            cmap (str, optional): Colormap to apply to the figure.
+            origin (str, optional): Origin of figure.
+            redraw (bool): Redraw the canvas.
+        
+        """
         self._figure.clear()
         self._figure.figimage(img, cmap=cmap, origin=origin)
         if redraw:

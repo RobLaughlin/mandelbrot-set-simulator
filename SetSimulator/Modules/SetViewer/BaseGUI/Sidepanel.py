@@ -21,7 +21,7 @@ class SidepanelWidget(tk.Frame):
         self._subcomponents = dict()
 
     @property
-    def row(self):
+    def row(self) -> int:
         """int: Row of subcomponent in Sidepanel."""
         return self._row
     

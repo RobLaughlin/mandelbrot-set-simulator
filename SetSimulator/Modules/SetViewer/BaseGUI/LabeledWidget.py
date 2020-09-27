@@ -6,9 +6,9 @@ class LabeledWidget(tk.Frame):
     
     Args:
         master (tkinter.widget): The LabelWidget's container.
-        widget (tuple): (widget, options) The tuple consisting of the widget (tkinter.XX) and its specified options (dict).
+        widget (tuple) (widget, options): The tuple consisting of the widget (tkinter.XX) and its specified options (dict).
         text (str): Text of the label.
-        grid_index (tuple): (int, int) Location on the tkinter grid system.
+        grid_index (tuple) (int, int): Location (Row, Col) on the tkinter grid system.
 
     Attributes:
         widget (tkinter.widget): Widget of the component.

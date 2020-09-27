@@ -9,7 +9,7 @@ class RangeFrame(tk.Frame):
 
     Args:
         master (tkinter.widget): The container of the range frame.
-        validate (function): Validation event when a key is entered.
+        validate (function(key, entry)): Validation event when a key is entered.
         grid_index (tuple): (int, int) Row and column position on the tkinter grid.
         text (str): Text of each minumum and maximum label.
     

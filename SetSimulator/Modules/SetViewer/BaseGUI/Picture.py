@@ -8,8 +8,8 @@ class AnimationCheckbox(tk.Checkbutton):
 
     Args:
         master (tkinter.widget): Animation checkbox container widget.
-        handler (function): Event handler for checkbox click.
-        grid_index (tuple) (int, int): Row and column position on the tkinter grid.
+        handler (function(widget)): Event handler for checkbox click.
+        grid_index (tuple) (int, int): (Row, Col) position on the tkinter grid.
         checked_default (bool): Whether to initially check the animation checkbox.
     
     Attributes:
@@ -37,8 +37,8 @@ class ColormapWidget(LabeledWidget):
 
     Args:
         master (tkinter.widget): Colormap container widget.
-        handler (function): Event handler for widget selection
-        grid_index (tuple) (int, int):  Row and column position on the tkinter grid.
+        handler (function(widget)): Event handler for widget selection
+        grid_index (tuple) (int, int): (Row, Col) position on the tkinter grid.
         colormaps (list): List of available Matplotlib colormaps.
         default_value (str): Default colormap.
     
@@ -69,9 +69,9 @@ class PictureWidget(tk.LabelFrame):
     Widget Args:
         colormaps (list): List of available Matplotlib color maps.
         default_colormap (str): Default color map to select on load.
-        colormap_changed (function): Event handler for colormap changing selection.
-        anim_btn_clicked (function): Event handler for clicking the animation button.
-        save_btn_clicked (function): Event handler for clicking the save button.
+        colormap_changed (function(widget)): Event handler for colormap changing selection.
+        anim_btn_clicked (function(widget)): Event handler for clicking the animation button.
+        save_btn_clicked (function(widget)): Event handler for clicking the save button.
     
     """
     def __init__(self, master:tk.Widget, widget_params:Dict[str, object], minwidth:int):

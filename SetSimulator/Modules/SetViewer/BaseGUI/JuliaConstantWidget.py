@@ -8,9 +8,9 @@ class JuliaComplexPart(LabeledWidget):
     
     Args:
         master (tkinter.widget): Container of the real/imaginary part widgets.
-        const_range (tuple) (float, float): Minimum and maximum for the part range, respecitvely.
+        const_range (tuple) (float, float): (Minimum, Maximum) for the part range, respecitvely.
         handler (function(JuliaComplexPart)): Event handler for when the part widget is changed.
-        grid_index (tuple) (int, int): Location on the tkinter grid system.
+        grid_index (tuple) (int, int): Location (Row, Col) on the tkinter grid system.
         default_value (int): The default value of the part widget.
     
     """
@@ -66,7 +66,9 @@ class JuliaConstantWidget(tk.LabelFrame):
         return float(self._imag_part.val)
     
     def hide(self):
+        """Hide the widget."""
         self.grid_remove()
     
     def show(self):
+        """Show the widget."""
         self.grid()

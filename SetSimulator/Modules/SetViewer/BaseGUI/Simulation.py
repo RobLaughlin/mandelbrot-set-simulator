@@ -53,13 +53,10 @@ class SetListWidget(LabeledWidget):
 
     Args:
         master (tkinter.widget): The set list component's container.
-        handler (function): Event handler for selecting a different set.
+        handler (function(widget)): Event handler for selecting a different set.
         grid_index (tuple): (int, int) Location on the tkinter grid system.
         default_value (int, optional): Default set
-    
-    Attributes:
-        val (int): Current selected index value in the set list.
-    
+
     """
     def __init__(self, master:tk.Widget, handler:Callable, setlist:list, grid_index:tuple, default_value=0):
         widget = ttk.Combobox
@@ -75,8 +72,8 @@ class GenerationControlWidget(tk.Frame):
 
     Args:
         master (tkinter.widget): The generation control component's container.
-        generate_handler (function): Event handler for generate button click.
-        pause_handler (function): Event handler for pause button click.
+        generate_handler (function(button)): Event handler for generate button click.
+        pause_handler (function(button)): Event handler for pause button click.
         grid_index (tuple): (int, int) Location on the tkinter grid system.
     
     Attributes:
@@ -143,9 +140,9 @@ class SimulationWidget(tk.LabelFrame):
         max_iterations (int): Maximum iterations for complex set calculations.
         max_delay (int): Maximum animation delay between rendering frames.
         setlist (simulation.setlistwidget): Complex set widget container.
-        setlist_changed (function): Event handler for changing the set list.
-        generate_btn_clicked (function): Event handler for clicking the generate button.
-        pause_btn_clicked (function): Event handler for clicking the pause button.
+        setlist_changed (function(widget)): Event handler for changing the set list.
+        generate_btn_clicked (function(button)): Event handler for clicking the generate button.
+        pause_btn_clicked (function(button)): Event handler for clicking the pause button.
     
     """
     def __init__(self, master:tk.Widget, widget_params:Dict[str, object], minwidth:int):

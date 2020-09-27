@@ -185,7 +185,7 @@ class BaseGUI(ABC):
         current_time = time.strftime("%Y-%m-%d %I %M %p")
         plt.savefig(BaseGUI.SAVE_DIRECTORY + '/%s Set - %s' % (self.sidepanel.components['simulation'].setlist.val, current_time))
     
-    def range_entry_handler(self, key, entry):
+    def range_entry_handler(self, key:str, entry:str) -> bool:
         """Validation function for each keystroke of a XY range entry.
 
         Args:
