@@ -203,6 +203,10 @@ class SetViewer(BaseGUI):
             event (matplotlib.backend_bases.mouseevent): Event data regarding where on the canvas was clicked.
         
         """
+
+        # Set must be generated first.
+        if self.selected_set == None:
+            return
         
         # Zoom multiplier
         m = 1
@@ -214,8 +218,8 @@ class SetViewer(BaseGUI):
             m = 3
         
         # Some zoom math
-        x_range = self.selected_set.coord_range.get_xRange()
-        y_range = self.selected_set.coord_range.get_yRange()
+        x_range = self.selected_set.coord_range.x_range
+        y_range = self.selected_set.coord_range.y_range
         
         x_len = abs(x_range[1] - x_range[0])
         y_len = abs(y_range[1] - y_range[0])

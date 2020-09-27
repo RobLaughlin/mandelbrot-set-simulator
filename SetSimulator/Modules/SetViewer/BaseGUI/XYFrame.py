@@ -62,8 +62,8 @@ class XYFrame(tk.LabelFrame):
         super().__init__(master, text='XY Coordinate Range')
         self.columnconfigure(0, minsize=minwidth)
 
-        xr = widget_params['coord_range'].get_xRange()
-        yr = widget_params['coord_range'].get_yRange()
+        xr = widget_params['coord_range'].x_range
+        yr = widget_params['coord_range'].y_range
         validate = widget_params['validate']
         
         self._x_range = RangeFrame(self, validate, (0, 0), xr, 'X')
@@ -103,8 +103,8 @@ class XYFrame(tk.LabelFrame):
         return coords
     
     def update_all(self, coord_range:crange):
-        x_range = coord_range.get_xRange()
-        y_range = coord_range.get_yRange()
+        x_range = coord_range.x_range
+        y_range = coord_range.y_range
 
         self._x_range.min.val = x_range[0]
         self._x_range.max.val = x_range[1]

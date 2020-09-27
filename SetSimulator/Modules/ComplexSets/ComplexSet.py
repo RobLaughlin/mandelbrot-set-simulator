@@ -104,8 +104,8 @@ class ComplexSet(ABC):
         
         """
 
-        xRange = self.coord_range.get_xRange()
-        yRange = self.coord_range.get_yRange()
+        xRange = self.coord_range.x_range
+        yRange = self.coord_range.y_range
         
         real_parts = np.linspace(xRange[0], xRange[1], xVals)
         imag_parts = np.linspace(yRange[0], yRange[1], yVals)
