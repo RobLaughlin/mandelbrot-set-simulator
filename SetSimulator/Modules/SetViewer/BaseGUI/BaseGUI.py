@@ -4,344 +4,213 @@ from tkinter import ttk
 from os import path, makedirs
 from matplotlib import pyplot as plt
 from PIL import Image, ImageTk
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
 import webbrowser
+import time
 
 from ...ComplexSets.CoordinateRange import CoordinateRange as crange
+from .Root import RootWidget as Root
+from .Sidepanel import SidepanelWidget as Sidepanel
+from .Simulation import SimulationWidget as SimulationSection
+from .Picture import PictureWidget as Picture
+from .XYFrame import XYFrame
+from .JuliaConstantWidget import JuliaConstantWidget as JuliaConstant
+from .CanvasContainer import Canvas
+
+class MinimumWidthExceeded(Exception):
+    """Minimum width of the GUI does not match the static minimum width."""
+    pass
+
+class MinimumHeightExceeded(Exception):
+    """Minimum height of the GUI does not match the static minimum height."""
+    pass
+
+class ColorMapNotIncluded(Exception):
+    """Color map is not included in the color maps provided by Matplotlib."""
+    pass
 
 class BaseGUI(ABC):
-    class MinimumWidthExceeded(Exception):
-        pass
+    """Initialize the base GUI for the set simulator.
 
-    class MinimumHeightExceeded(Exception):
-        pass
+    Args:
+        sets (dict of str: int): Mapping of set names to Complex Set objects.
+        title (str): Title of the window.
+        colormap (str): Default colormap to apply to the GUI figure.
+        iterations (int): Max number of iterations to simulate.
+        dimensions (tuple): (width, height) used to initialize the root widget.
+        max_interval_delay (int): Max delay between frame animation.
+        julia_constant (complex): (real, imag) specific constant to use for simulating the Julia set.
+        coord_range (coordinaterange): the default coordinate range initialized in the GUI.
     
-    class ColorMapNotIncluded(Exception):
-        pass
-    
+    Attributes:
+        GITHUB_URL (str): GitHub URI.
+        GITHUB_PNG (str): GitHub logo/icon path.
+        DEFAULT_PNG (str): Default image path to use for figure before set generation.
+        SIMULATOR_ICON (str): Icon path for GUI.
+        SAVE_DIRECTORY (str): Directory path where images will be saved.
+        MIN_WIDTH (int): Minimum width of the GUI in pixels.
+        MIN_HEIGHT (int): Minimum height of the GUI in pixels.
+        SIDEPANEL_WIDTH (int): Width of the GUI Sidepanel.
+
+        width (int): Width of the GUI.
+        height (int): Height of the GUI.
+        figure (matplotlib.pyplot.figure): Figure to display the generated sets.
+        canvas (matplotlib.backends.backend_tkagg.figurecanvastkagg): Canvas to connect matplotlib figure and tkinter.
+        root (RootWidget): Top-level widget for GUI
+        sidepanel (SidepanelWidget): Main sidepanel container for most of the GUI controls.
+        
+    Raises:
+        MinimumWidthExceeded: Minimum width of the GUI does not match the static minimum width.
+        MinimumHeightExceeded: Minimum height of the GUI does not match the static minimum height.
+        ColorMapNotIncluded: Color map is not included in the color maps provided by Matplotlib.
+        FileNotFoundError: Static images/files were not found in the img/ filepath.
+
+    """
+
     GITHUB_URL = 'https://github.com/RobLaughlin/complex-set-simulator'
-
-    NULLSET_PNG = 'img/nullset.png'
     GITHUB_PNG = 'img/github.png'
+    DEFAULT_PNG = 'img/nullset.png'
     SIMULATOR_ICON = 'img/mset.ico'
     SAVE_DIRECTORY = 'images'
-
-    # Required for UI scaling
     MIN_WIDTH = 650
     MIN_HEIGHT = 650
     SIDEPANEL_WIDTH = 250
-
-    # Required to prevent UI lockup in animation
-    MIN_FRAME_DELAY = 1
     
-    def __init__(self, sets, coord_range:crange, dimensions=(600,600), iterations=250, 
-                colormap='hot', title='Set Viewer', max_interval_delay=1000, julia_constant=1j):
-        
+    def __init__(self, **kwargs):
         colormaps = plt.colormaps()
-        if colormap not in colormaps:
-            raise BaseGUI.ColorMapNotIncluded('Color map "%s" is not included in the Matplotlib list of color maps.' % colormap)
+        if kwargs['colormap'] not in colormaps:
+            raise ColorMapNotIncluded('Color map "%s" is not included in the Matplotlib list of color maps.' % kwargs['colormap'])
         
-        if dimensions[0] < BaseGUI.MIN_WIDTH:
-            raise BaseGUI.MinimumWidthExceeded('BaseGUI width cannot be less than %d pixels.' % BaseGUI.MIN_WIDTH)
+        if kwargs['dimensions'][0] < BaseGUI.MIN_WIDTH:
+            raise MinimumWidthExceeded('BaseGUI width cannot be less than %d pixels.' % BaseGUI.MIN_WIDTH)
 
-        if dimensions[1] < BaseGUI.MIN_HEIGHT:
-            raise BaseGUI.MinimumHeightExceeded('BaseGUI height cannot be less than %d pixels.' % BaseGUI.MIN_HEIGHT)
-
-        self.dpi = 100
-        self.width = dimensions[0]
-        self.height = dimensions[1]
-        self.figwidth = self.width / 100
-        self.figheight = self.height / 100
-        self.figure = plt.figure(figsize=(self.figwidth, self.figheight), dpi=self.dpi)
+        if kwargs['dimensions'][1] < BaseGUI.MIN_HEIGHT:
+            raise MinimumHeightExceeded('BaseGUI height cannot be less than %d pixels.' % BaseGUI.MIN_HEIGHT)
 
         if not path.exists(BaseGUI.SIMULATOR_ICON):
             raise FileNotFoundError('%s File not found.' % BaseGUI.SIMULATOR_ICON)
 
-        # Root widget
-        self.root = tk.Tk()
-        self.root.wm_title(title)
-        self.root.geometry('%dx%d'%(self.width + BaseGUI.SIDEPANEL_WIDTH, self.height))
-        self.root.columnconfigure(0, minsize=BaseGUI.SIDEPANEL_WIDTH)
-        self.root.iconbitmap(BaseGUI.SIMULATOR_ICON)
-
-        # Main set canvas
-        self.canvas = FigureCanvasTkAgg(self.figure, master=self.root)
-        self.canvas.get_tk_widget().grid(row=0, column=1, sticky=tk.E)
-
-        # Left sidepanel frame
-        self.sidepanel = tk.LabelFrame(self.root, bd=0)
-        self.sidepanel.grid(row=0, column=0, sticky='N')
-
-        # Sidepanel contents
-        self.__load_simulation_section(iterations, max_interval_delay, sets)
-        self.__load_picture_section(colormaps, colormap)
-        self.__load_xyrange_section(coord_range)
-        self.__load_julia_set_UI(julia_constant)
-
-        # Close button
-        self.close_button = tk.Button(self.sidepanel, text='Close', command=lambda: self.root.quit(), border=2, padx=32, pady=4, width=8)
-        self.close_button.grid(row=4, column=0, pady=8, sticky='S')
-        
-        # Load default set figure
-        self.load_default_figure()
-
-        # Github link
         if not path.exists(BaseGUI.GITHUB_PNG):
             raise FileNotFoundError('%s File not found.' % BaseGUI.GITHUB_PNG)
 
-        img = Image.open(BaseGUI.GITHUB_PNG)
-        gh_img = ImageTk.PhotoImage(img, master=self.sidepanel)
-        self.gh_button = tk.Button(self.sidepanel, image=gh_img, border=1, command=lambda: webbrowser.open(BaseGUI.GITHUB_URL))
-        self.gh_button.image = gh_img
-        self.gh_button.grid(row=5, column=0, sticky='S')
+        minwidth = BaseGUI.SIDEPANEL_WIDTH - 40
+        dims = kwargs['dimensions']
+        new_dims = (dims[0] + BaseGUI.SIDEPANEL_WIDTH, dims[1])
+
+        # Width/Height specifications
+        self.width = new_dims[0]
+        self.height = new_dims[1]
+        self.figure = plt.figure(figsize=(dims[0] / 100, dims[1] / 100), dpi=100)
+
+        # Main GUI components
+        self.root = Root(kwargs['title'], new_dims, minwidth=BaseGUI.SIDEPANEL_WIDTH)
+        self.root.icon = BaseGUI.SIMULATOR_ICON
+        self.canvas = Canvas(self.root, (dims[0], dims[1]), BaseGUI.DEFAULT_PNG, 100)
+        self.canvas.get_tk_widget().grid(row=0, column=1, sticky='E')
+        self.canvas.mpl_connect('button_press_event', lambda: self.canvas_onclick(self.canvas))
+
+        # Validation function for coordinate range entries
+        validate = (self.root.register(self.range_entry_handler), '%S', '%P')
+
+        #Sidepanel subcomponent configuration
+        simulation_widget_config = {'max_iterations': kwargs['iterations'],
+                                    'max_delay': kwargs['max_interval_delay'],
+                                    'setlist': list(kwargs['sets'].keys()),
+                                    'setlist_changed' : self.set_list_changed,
+                                    'generate_btn_clicked': self.generate_btn_clicked,
+                                    'pause_btn_clicked': self.pause_btn_clicked,
+                                    'continue_btn_clicked': self.continue_btn_clicked}
+
+        picture_widget_config = {'colormaps': colormaps,
+                                'default_colormap': kwargs['colormap'],
+                                'colormap_changed': self.color_map_changed,
+                                'anim_btn_clicked': self.animation_checkbox_clicked,
+                                'save_btn_clicked': self.save_btn_clicked}
+
+        xy_widget_config = {'coord_range': kwargs['coord_range'],
+                            'validate': validate}
+        
+        julia_constant_config = {'real_handler': self.real_part_changed,
+                                'real_range': (-2, 2),
+                                'imag_handler': self.imag_part_changed,
+                                'imag_range': (-2, 2),
+                                'default_value': kwargs['julia_constant']}
+
+        #Sidepanel components/subcomponents
+        self.sidepanel = Sidepanel(self.root, (0, 0))
+        self.sidepanel.grid_configure(sticky='N')
+
+        simulation = SimulationSection(self.sidepanel, simulation_widget_config, minwidth)
+        picture = Picture(self.sidepanel, picture_widget_config, minwidth)        
+        xy_frame = XYFrame(self.sidepanel, xy_widget_config, minwidth)
+        julia_constant = JuliaConstant(self.sidepanel, julia_constant_config, minwidth)
+        
+        close_button = tk.Button(self.sidepanel, text='Close', command=self.root.quit, border=2, padx=32, pady=4, width=8)
+        close_button.grid(pady=8, sticky='S')
+
+        gh_img = ImageTk.PhotoImage(Image.open(BaseGUI.GITHUB_PNG), master=self.sidepanel)
+        gh_button = tk.Button(self.sidepanel, image=gh_img, border=1, command=lambda: webbrowser.open(BaseGUI.GITHUB_URL))
+        gh_button.image = gh_img
+        gh_button.grid(sticky='S')
+
+        self.sidepanel.add_component('simulation', simulation)
+        self.sidepanel.add_component('picture', picture)
+        self.sidepanel.add_component('xy_range', xy_frame)
+        self.sidepanel.add_component('julia_constant', julia_constant)
+        self.sidepanel.add_component('close', close_button)
+        self.sidepanel.add_component('github', gh_button)
+
+        if simulation.setlist.val != 'Julia':
+            julia_constant.hide()
     
-    def __load_simulation_section(self, iterations, max_interval_delay, sets):
+    def set_list_changed(self, widget:ttk.Combobox):
+        self.root.focus()
+        julia_constant = self.sidepanel.components['julia_constant']
+        julia_constant.show() if widget.val == 'Julia' else julia_constant.hide()
 
-        # Simulation frame
-        self.simulation_frame = tk.LabelFrame(self.sidepanel, text='Simulation', padx=4, pady=4)
-        self.simulation_frame.columnconfigure(0, minsize=BaseGUI.SIDEPANEL_WIDTH - 40)
-        self.simulation_frame.grid(row=0, column=0)
-
-        # Iteration frame
-        self.iteration_frame = tk.LabelFrame(self.simulation_frame, bd=0)
-        self.iteration_frame.grid(row=0, column=0)
-
-        # Iteration label
-        self.iteration_label = tk.Label(self.iteration_frame, text='Iterations:')
-        self.iteration_label.grid(row=0, column=0, sticky='S', pady=(0, 4))
-
-        # Iteration slider
-        self.iteration_slider = tk.Scale(self.iteration_frame, from_=1, to=iterations, orient=tk.HORIZONTAL)
-        self.iteration_slider.set(iterations // 2)
-        self.iteration_slider.grid(row=0, column=1)
-
-        # Animation interval frame
-        self.interval_frame= tk.LabelFrame(self.simulation_frame, bd=0)
-        self.interval_frame.grid(row=1, column=0, pady=(0, 4))
-
-        # Interval label
-        self.interval_label = tk.Label(self.interval_frame, text='Delay (MS):')
-        self.interval_label.grid(row=0, column=0, sticky='S', pady=(0, 4))
-
-        # Interval slider
-        self.interval_slider = tk.Scale(self.interval_frame, from_=BaseGUI.MIN_FRAME_DELAY, to=max_interval_delay, orient=tk.HORIZONTAL)
-        self.interval_slider.set(max_interval_delay // 2)
-        self.interval_slider.grid(row=0, column=1)
-
-        # Set list
-        self.set_group = tk.LabelFrame(self.simulation_frame, bd=0)
-        self.set_list_label = tk.Label(self.set_group, text='Set:')
-        self.set_list_label.grid(row=0, column=0, padx=(0, 8))
-        self.set_list = ttk.Combobox(self.set_group, values=list(sets.keys()), state='readonly', width=12)
-        self.set_list.bind("<<ComboboxSelected>>", self.set_list_changed)
-        self.set_list.grid(row=0, column=1)
-        self.set_list.current(0)
-        self.set_group.grid(row=2, column=0, pady=8)
-
-        # Progress bar
-        self.progress_bar = ttk.Progressbar(self.simulation_frame, orient=tk.HORIZONTAL, mode='determinate', length=150)
-        self.progress_bar.grid(row=3, column=0, pady=8)
-
-        # Generation frame
-        self.generation_frame = tk.LabelFrame(self.simulation_frame, bd=0)
-        self.generation_frame.grid(row=4, column=0)
-
-        # Generate button
-        self.generate_button = tk.Button(self.generation_frame, text='Generate', padx=20, command=self.generate_wrapper)
-        self.generate_button.grid(row=0, column=0, pady=8, padx=4)
-
-        # Pause generation button
-        self.pause_button = tk.Button(self.generation_frame, padx=20, command=self.pause_generation, text='Pause')
-        self.pause_button['state'] = 'disabled'
-        self.pause_button.grid(row=0, column=1, pady=8, padx=4)
-
-    def __load_picture_section(self, colormaps, colormap):
-
-        # Picture frame
-        self.picture_frame = tk.LabelFrame(self.sidepanel, text='Picture')
-        self.picture_frame.columnconfigure(0, minsize=BaseGUI.SIDEPANEL_WIDTH - 40)
-        self.picture_frame.grid(row=1, column=0)
-
-        # Color map
-        self.color_map_group = tk.LabelFrame(self.picture_frame, bd=0)
-        self.color_map_label = tk.Label(self.color_map_group, text='Color Map:')
-        self.color_map_label.grid(row=0, column=0, padx=(0, 8))
-        self.color_map_list = ttk.Combobox(self.color_map_group, values=colormaps, state='readonly', width=12)
-        self.color_map_list.bind("<<ComboboxSelected>>", self.color_map_changed)
-        self.color_map_list.grid(row=0, column=1)
-        self.color_map_list.current(colormaps.index(colormap))
-        self.color_map_group.grid(row=0, column=0, pady=4, sticky='W')
-
-        # Animation checkbox
-        self.animation_check_val = tk.BooleanVar(value=True)
-        self.animation_checkbox = tk.Checkbutton(self.picture_frame, text='Animation', 
-                                                variable=self.animation_check_val, command=self.animation_checkbox_clicked)
-        self.animation_checkbox.grid(row=1, column=0, padx=(0, 8), pady=2, sticky='W')
-        self.animation_checkbox.select()
-
-        # Save button
-        self.save_button = tk.Button(self.picture_frame, text='Save Image', command=self.save_button_handler, padx=32, pady=4, width=8)
-        self.save_button.grid(row=3, column=0, pady=8)
-
-    def __load_xyrange_section(self, coord_range:crange):
-
-        # XY range frame
-        self.xy_frame = tk.LabelFrame(self.sidepanel, text='XY Coordinate Range')
-        self.xy_frame.columnconfigure(0, minsize=BaseGUI.SIDEPANEL_WIDTH - 40)
-        self.xy_frame.grid(row=2, column=0)
+    def save_btn_clicked(self, widget:tk.Button):
+        if not path.exists(BaseGUI.SAVE_DIRECTORY):
+            makedirs(BaseGUI.SAVE_DIRECTORY)
         
-        # Validate entry command
-        vdbl = (self.root.register(self.range_entry_handler), '%S', '%P')
-
-        # X range frame
-        self.x_frame = tk.LabelFrame(self.xy_frame, bd=0)
-        self.x_frame.grid(row=0, column=0, pady=(8, 0))
-
-        # Min x frame
-        self.min_x_frame = tk.LabelFrame(self.x_frame, bd=0)
-        self.min_x_frame.grid(row=0, column=0, padx=4)
-        
-        # Min x label
-        self.min_x_label = tk.Label(self.min_x_frame, text='Min x:')
-        self.min_x_label.grid(row=0, column=0)
-
-        # Min x entry
-        min_x = coord_range.get_xRange()[0]
-        self.min_x_entry = tk.Entry(self.min_x_frame, width=8, validate='key', validatecommand=vdbl)
-        self.min_x_entry.insert(0, str(min_x))
-        self.min_x_entry.grid(row=0, column=1)
-
-        # Max x frame
-        self.max_x_frame = tk.LabelFrame(self.x_frame, bd=0)
-        self.max_x_frame.grid(row=0, column=1, padx=4)
-
-        # Max x label
-        self.max_x_label = tk.Label(self.max_x_frame, text='Max x:')
-        self.max_x_label.grid(row=0, column=0)
-
-        # Max x entry
-        max_x = coord_range.get_xRange()[1]
-        self.max_x_entry = tk.Entry(self.max_x_frame, width=8, validate='key', validatecommand=vdbl)
-        self.max_x_entry.insert(0, str(max_x))
-        self.max_x_entry.grid(row=0, column=1)
-
-        # Y range frame
-        self.y_frame = tk.LabelFrame(self.xy_frame, bd=0)
-        self.y_frame.grid(row=1, column=0, pady=8)
-
-        # Min y frame
-        self.min_y_frame = tk.LabelFrame(self.y_frame, bd=0)
-        self.min_y_frame.grid(row=0, column=0, padx=4)
-        
-        # Min y label
-        self.min_y_label = tk.Label(self.min_y_frame, text='Min y:')
-        self.min_y_label.grid(row=0, column=0)
-
-        # Min y entry
-        min_y = coord_range.get_yRange()[0]
-        self.min_y_entry = tk.Entry(self.min_y_frame, width=8, validate='key', validatecommand=vdbl)
-        self.min_y_entry.insert(0, str(min_y))
-        self.min_y_entry.grid(row=0, column=1)
-
-        # Max y frame
-        self.max_y_frame = tk.LabelFrame(self.y_frame, bd=0)
-        self.max_y_frame.grid(row=0, column=1, padx=4)
-
-        # Max y label
-        self.max_y_label = tk.Label(self.max_y_frame, text='Max y:')
-        self.max_y_label.grid(row=0, column=0)
-
-        # Max y entry
-        max_y = coord_range.get_yRange()[1]
-        self.max_y_entry = tk.Entry(self.max_y_frame, width=8, validate='key', validatecommand=vdbl)
-        self.max_y_entry.insert(0, str(max_y))
-        self.max_y_entry.grid(row=0, column=1)
+        current_time = time.strftime("%Y-%m-%d %I %M %p")
+        plt.savefig(BaseGUI.SAVE_DIRECTORY + '/%s Set - %s' % (self.sidepanel.components['simulation'].setlist.val, current_time))
     
-    def __load_julia_set_UI(self, julia_constant):
-
-        # Julia set constant label frame
-        self.julia_constant_frame = tk.LabelFrame(self.sidepanel, text='Julia Constant')
-        self.julia_constant_frame.columnconfigure(0, minsize=BaseGUI.SIDEPANEL_WIDTH - 40)
-        self.julia_constant_frame.grid(row=3, column=0)
-        self.julia_constant_frame.grid_forget()
-
-        # Real part label frame
-        self.real_part_frame = tk.LabelFrame(self.julia_constant_frame, bd=0)
-        self.real_part_frame.grid(row=0, column=0)
-
-        # Real part label
-        self.real_part_label = tk.Label(self.real_part_frame, text='Real:')
-        self.real_part_label.grid(row=0, column=0, sticky='SW')
-
-        # Real part slider
-        self.real_part_slider = tk.Scale(self.real_part_frame, from_=-2, to=2, orient=tk.HORIZONTAL, 
-                                        digits=8, resolution=0.000001, command=self.real_part_changed)
-        self.real_part_slider.set(julia_constant.real)
-        self.real_part_slider.grid(row=0, column=1)
-
-        # Imag part label frame
-        self.imag_part_frame = tk.LabelFrame(self.julia_constant_frame, bd=0)
-        self.imag_part_frame.grid(row=1, column=0)
-
-        # Imag part label
-        self.imag_part_label = tk.Label(self.imag_part_frame, text='Imag:')
-        self.imag_part_label.grid(row=0, column=0, sticky='SW')
-
-        # Imag part slider
-        self.imag_part_slider = tk.Scale(self.imag_part_frame, from_=-2, to=2, orient=tk.HORIZONTAL, 
-                                        digits=8, resolution=0.000001, command=self.imag_part_changed)
-        self.imag_part_slider.set(julia_constant.imag)
-        self.imag_part_slider.grid(row=0, column=1)
-
-
-    def load_default_figure(self):
-        """ Load the null set image into figure when the GUI loads """
-        if not path.exists(BaseGUI.NULLSET_PNG):
-            raise FileNotFoundError('%s File not found.' % BaseGUI.NULLSET_PNG)
+    def range_entry_handler(self, key, entry):
+        try:
+            float(entry)
+        except:
+            if entry != '':
+                return False
         
-        img = Image.open(BaseGUI.NULLSET_PNG)
-
-        # Pad image with emptiness
-        new_img = Image.new('RGBA', (self.width, self.height), 'white')
-        offset_width = (self.width - img.width) // 2
-        offset_height = (self.height - img.height) // 2
-        new_img.paste(img, (offset_width, offset_height))
-        
-        self.figure.figimage(new_img, cmap='gray', origin='lower')
+        return True
 
     @abstractclassmethod
-    def set_list_changed(self):
-        pass
-
-    @abstractclassmethod
-    def pause_generation(self):
+    def pause_btn_clicked(self, widget):
         pass
     
     @abstractclassmethod
-    def color_map_changed(self):
+    def continue_btn_clicked(self, widget):
+        pass
+
+    @abstractclassmethod
+    def color_map_changed(self, widget, event):
         pass
     
     @abstractclassmethod
-    def animation_checkbox_clicked(self):
+    def animation_checkbox_clicked(self, widget):
         pass
 
     @abstractclassmethod
-    def save_button_handler(self):
+    def real_part_changed(self, widget):
         pass
 
     @abstractclassmethod
-    def range_entry_handler(self):
+    def imag_part_changed(self, widget):
         pass
 
     @abstractclassmethod
-    def real_part_changed(self):
+    def generate_btn_clicked(self, widget):
         pass
 
     @abstractclassmethod
-    def imag_part_changed(self):
-        pass
-
-    @abstractclassmethod
-    def generate_wrapper(self):
+    def canvas_onclick(self, canvas):
         pass

@@ -7,7 +7,6 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 import matplotlib.animation as anim
 import webbrowser
-import time
 import copy
 
 from ..ComplexSets.ComplexSet import ComplexSet as Set
@@ -37,38 +36,16 @@ class SetViewer(BaseGUI):
         self.sets = sets
         self.selected_set = iter(copy.deepcopy(setlist[0]))
 
-    def __init__(self, setlist, dimensions=(600,600), iterations=250, colormap='hot', title='Set Viewer', 
-                max_interval_delay=1000, maintain_ratio=True, julia_constant=1j):
-        
-        self.__init_sets(setlist, dimensions)
-        super().__init__(self.sets, setlist[0].get_coord_range(), dimensions, iterations, colormap, title, max_interval_delay, julia_constant)
-        
-        self.maintain_ratio = maintain_ratio
+    def __init__(self, **kwargs):
+        self.__init_sets(kwargs['setlist'], kwargs['dimensions'])
 
-        # Animation source for the set being generated
+        kwargs['coord_range'] = self.selected_set.get_coord_range()
+        kwargs['sets'] = self.sets
+        super().__init__(**kwargs)
+        
+        self.maintain_ratio = kwargs['maintain_ratio']
         self.anim = None
-
-        # To track where tkinter is during the generation process
         self.after_id = None
-        
-        # Set zoom handler
-        self.canvas.mpl_connect('button_press_event', self.canvas_onclick)
-
-    def update_xyrange_entries(self, coord_range:crange):
-        x_range = coord_range.get_xRange()
-        y_range = coord_range.get_yRange()
-
-        self.min_x_entry.delete(0, tk.END)
-        self.min_x_entry.insert(0, str(x_range[0]))
-
-        self.max_x_entry.delete(0, tk.END)
-        self.max_x_entry.insert(0, str(x_range[1]))
-
-        self.min_y_entry.delete(0, tk.END)
-        self.min_y_entry.insert(0, str(y_range[0]))
-
-        self.max_y_entry.delete(0, tk.END)
-        self.max_y_entry.insert(0, str(y_range[1]))
 
     def canvas_onclick(self, event):
         """ Handler for clicking the set canvas """
@@ -93,7 +70,7 @@ class SetViewer(BaseGUI):
         pad_y = (m * y_len)
 
         if self.maintain_ratio:
-            r = self.width / self.height
+            r = self.canvas.width / self.canvas.height
             pad_x *= r
             pad_y *= r
 
@@ -101,35 +78,12 @@ class SetViewer(BaseGUI):
         pad_y /= 2
 
         new_crange = crange(rel_x - pad_x, rel_x + pad_x, rel_y - pad_y, rel_y + pad_y)
-        self.update_xyrange_entries(new_crange)
+        self.sidepanel.components['xy_frame'].update_all(new_crange)
         self.generate_wrapper()
 
-    def range_entry_handler(self, key, entry):
-        try:
-            float(entry)
-        except:
-            if entry != '':
-                return False
-        
-        return True
-    
-    def save_button_handler(self):
-        if not path.exists(SetViewer.SAVE_DIRECTORY):
-            makedirs(SetViewer.SAVE_DIRECTORY)
-        
-        current_time = time.strftime("%Y-%m-%d %I %M %p")
-        plt.savefig(SetViewer.SAVE_DIRECTORY + '/%s Set - %s' % (self.selected_set.name, current_time))
-    
-    def set_list_changed(self, e):
-        self.root.focus()
-        selected_set = self.sets[self.set_list.get()]
-        if selected_set.name == 'Julia':
-            self.julia_constant_frame.grid(row=3, column=0)
-        else:
-            self.julia_constant_frame.grid_forget()
-        
-    def animation_checkbox_clicked(self):
-        self.animation_check_val.set(not self.animation_check_val.get())
+    def animation_checkbox_clicked(self, widget):
+        anim_check = self.sidepanel.components['picture'].animation
+        anim_check.val = not anim_check.val 
         self.stop_generation(clear=False)
     
     def color_map_changed(self, *args):
@@ -137,10 +91,6 @@ class SetViewer(BaseGUI):
             selected_cmap = self.color_map_list.get()
             self.update_canvas(cmap=selected_cmap)
             self.canvas.draw()
-    
-    def update_canvas(self, cmap):
-        self.figure.clear()
-        self.figure.figimage(self.selected_set.get_set()['divergence'], cmap=cmap, origin='lower')
 
     def real_part_changed(self, e):
         selected_set = self.sets[self.set_list.get()]
@@ -178,20 +128,6 @@ class SetViewer(BaseGUI):
                 self.pause_button['text'] = 'Pause'
         else:
             self.anim.event_source.stop()
-    
-    def continue_generation(self):
-        self.generate_wrapper(reset=False)
-
-    def pause_generation(self):
-        clear = True if self.selected_set.get_current_iteration() >= self.selected_set.get_iterations() else False
-        selected_cmap = self.color_map_list.get()
-
-        self.stop_generation(clear=clear)
-        self.pause_button.config(command=self.continue_generation)
-        self.pause_button['text'] = 'Continue'
-        self.update_canvas(cmap=selected_cmap)
-        if not self.animation_check_val.get():
-            self.canvas.draw()
         
     def stop_generation(self, clear=True):
         # Check if a set is currently being generated
@@ -203,22 +139,6 @@ class SetViewer(BaseGUI):
             self.anim.event_source.stop()
 
         self.update_progress(clear=clear)
-
-    def validate_range_entries(self):
-        coords = None
-        try:
-            minX = float(self.min_x_entry.get())
-            maxX = float(self.max_x_entry.get())
-            minY = float(self.min_y_entry.get())
-            maxY = float(self.max_y_entry.get())
-            coords = crange(minX, maxX, minY, maxY)
-        except crange.InvalidCoordinateBounds as err:
-            tk.messagebox.showerror(title='Invalid Coordinate Bounds', message=err)
-            return
-        except ValueError:
-            tk.messagebox.showerror(title='Value Error', message="Invalid XY Range values.")
-            return
-        return coords
 
     def update_progress(self, clear=False):
         if clear:
@@ -270,3 +190,33 @@ class SetViewer(BaseGUI):
 
     def show(self):
         self.root.mainloop()
+
+    def pause_btn_clicked(self, widget:tk.Button):
+        clear = (self.selected_set.get_current_iteration() >= self.selected_set.get_iterations())
+        selected_cmap = self.sidepanel.components['picture'].colormaps.val
+
+        self.stop_generation(clear=clear)
+        widget.config(command=lambda: (self.generate_wrapper(reset=False)))
+        widget.text = 'Continue'
+        self.canvas.update(cmap=selected_cmap)
+        
+        if self.sidepanel.components['picture'].animation.val == False:
+            self.canvas.draw()
+    
+    def continue_btn_clicked(self, widget:tk.Button):
+        pass
+
+    def color_map_changed(self, widget, event):
+        pass
+    
+    def animation_checkbox_clicked(self, widget):
+        pass
+
+    def real_part_changed(self, widget):
+        pass
+
+    def imag_part_changed(self, widget):
+        pass
+
+    def generate_btn_clicked(self, widget):
+        pass

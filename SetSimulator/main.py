@@ -36,6 +36,7 @@ def init():
         mset = Mandelbrot(iterations=max_iterations, coord_range=crange)
         jset = Julia(iterations=max_iterations, coord_range=crange, constant=julia_constant)
         sets = [mset, jset]
+
         viewer = SetViewer(setlist=sets, title=title, colormap=colormap, iterations=max_iterations, julia_constant=julia_constant, 
                             dimensions=(width, height), max_interval_delay=max_anim_frame_delay, maintain_ratio=viewer['maintain_aspect_ratio'])
         viewer.show()
