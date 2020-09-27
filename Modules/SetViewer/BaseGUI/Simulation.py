@@ -11,9 +11,6 @@ class IterationWidget(LabeledWidget):
         max_iterations (int): Maximum iterations for complex set calculations.
         grid_index (tuple): (int, int) Location on the tkinter grid system.
         default_value (int, optional): Default value on the iteration scale.
-
-    Attributes:
-        max_iterations (int):  Maximum iterations for complex set calculations.
     
     """
     def __init__(self, master:tk.Widget, max_iterations:int, grid_index:tuple, default_value=1):
@@ -76,10 +73,6 @@ class GenerationControlWidget(tk.Frame):
         pause_handler (function(button)): Event handler for pause button click.
         grid_index (tuple): (int, int) Location on the tkinter grid system.
     
-    Attributes:
-        generate (tkinter.button): Generate set button
-        pause (tkinter.button): Pause generation button
-    
     """
     def __init__(self, master:tk.Widget, generate_handler:Callable, pause_handler:Callable, continue_handler:Callable, grid_index:tuple):
         super().__init__(master, bd=0)
@@ -128,21 +121,12 @@ class SimulationWidget(tk.LabelFrame):
         master (tkinter.widget): The simulation frame's container.
         widget_params (dict[str, object]): widget-specific options
         minwidth (int): Minimum width of simulation frame.
-
-    Attributes:
-        iterations (simulation.iterationwidget): Iteration widget subcomponent.
-        delay (simulation.animationdelaywidget): Frame delay subcomponent.
-        setlist (simulation.setlistwidget): Set list subcomponent.
-        progress_bar (tkinter.ttk.progressbar): Set generation progress bar subcomponent.
-        
-
-    Widget Params:
-        max_iterations (int): Maximum iterations for complex set calculations.
-        max_delay (int): Maximum animation delay between rendering frames.
-        setlist (simulation.setlistwidget): Complex set widget container.
-        setlist_changed (function(widget)): Event handler for changing the set list.
-        generate_btn_clicked (function(button)): Event handler for clicking the generate button.
-        pause_btn_clicked (function(button)): Event handler for clicking the pause button.
+        max_iterations (int) (Widget Arg): Maximum iterations for complex set calculations.
+        max_delay (int) (Widget Arg): Maximum animation delay between rendering frames.
+        setlist (simulation.setlistwidget) (Widget Arg): Complex set widget container.
+        setlist_changed (function(widget)) (Widget Arg): Event handler for changing the set list.
+        generate_btn_clicked (function(button)) (Widget Arg): Event handler for clicking the generate button.
+        pause_btn_clicked (function(button)) (Widget Arg): Event handler for clicking the pause button.
     
     """
     def __init__(self, master:tk.Widget, widget_params:Dict[str, object], minwidth:int):

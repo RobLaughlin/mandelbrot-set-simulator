@@ -29,17 +29,12 @@ class JuliaConstantWidget(tk.LabelFrame):
         widget_params (dict[str, object]): Widget-specific configuration.
         minwidth (int): The minimum width if the Julia constant widget.
         grid_index (tuple) (int, int): The respective (row, column) position on the tkinter grid.
-    
-    Attributes:
-        real (float): The value of the real part widget in the Julia set constant.
-        imag (float): The value of the imaginary part widget in the Julia set constant.
         
-    Widget Args:
-        real_handler (function(JuliaComplexPart)): Event handler for when the real part widget is changed.
-        real_range (tuple) (float, float): Respective minimum and maximum for the real range.
-        imag_handler (function(JuliaComplexPart)): Event handler for when the imaginary part widget is changed.
-        imag_range (tuple) (float, float): Respective minimum and maximum for the imaginary range.
-        default_value (complex): Complex number to use as the default selected constant for the Julia set widget.
+        real_handler (function(JuliaComplexPart)) (Widget Arg): Event handler for when the real part widget is changed.
+        real_range (tuple) (float, float) (Widget Arg): Respective minimum and maximum for the real range.
+        imag_handler (function(JuliaComplexPart)) (Widget Arg): Event handler for when the imaginary part widget is changed.
+        imag_range (tuple) (float, float) (Widget Arg): Respective minimum and maximum for the imaginary range.
+        default_value (complex) (Widget Arg): Complex number to use as the default selected constant for the Julia set widget.
     
     """
     def __init__(self, master:tk.Widget, widget_params:Dict[str, object], minwidth:int):
@@ -57,12 +52,12 @@ class JuliaConstantWidget(tk.LabelFrame):
 
     @property
     def real(self) -> float:
-        """float: The value of the real_part component"""
+        """float: The value of the real_part component."""
         return float(self._real_part.val)
     
     @property
     def imag(self) -> float:
-        """float: The value of the imaginary_part component"""
+        """float: The value of the imaginary_part componen."""
         return float(self._imag_part.val)
     
     def hide(self):

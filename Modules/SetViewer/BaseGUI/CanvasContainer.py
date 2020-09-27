@@ -16,11 +16,6 @@ class Canvas(FigureCanvasTkAgg):
         fpath (str): File path of the default image to load onto the canvas.
         dpi (int, optional): DPI of the figure, default is 100.
     
-    Attributes:
-        width (int): Width (in pixels) of the canvas.
-        height (int): Height (in pixels) of the canvas.
-        figure (matplotlib.pyplot.figure): Pyplot figure of the canvas.
-    
     """
     def __init__(self, master:tk.Widget, handler:Callable, size:tuple, fpath:str, dpi=100):
         self._width = size[0]

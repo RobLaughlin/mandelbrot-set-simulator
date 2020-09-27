@@ -7,11 +7,6 @@ class RootWidget(tk.Tk):
         title (str): Title of the root window.
         dimensions (tuple) (int, int): The (width, height) of the root widget.
         minwidth (int): The minimum width of the root widget.
-
-    Attributes:
-        title (str): Title of the root window.
-        icon (str): Path of icon file to be used as window icon.
-        dimensions (tuple (int, int): The (width, height) of the root widget.
     
     """
     def __init__(self, title:str, dimensions:tuple, minwidth:int):

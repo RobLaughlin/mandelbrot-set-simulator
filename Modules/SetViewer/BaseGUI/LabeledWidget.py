@@ -9,12 +9,6 @@ class LabeledWidget(tk.Frame):
         widget (tuple) (widget, options): The tuple consisting of the widget (tkinter.XX) and its specified options (dict).
         text (str): Text of the label.
         grid_index (tuple) (int, int): Location (Row, Col) on the tkinter grid system.
-
-    Attributes:
-        widget (tkinter.widget): Widget of the component.
-        label (tkinter.label): The label of the component.
-        text (str): The label text of the component.
-        val (object): The current value of the LabeledWidget.
     
     """
     def __init__(self, master:tk.Widget, widget:tuple, text:str, grid_index:tuple):

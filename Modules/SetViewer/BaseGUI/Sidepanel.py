@@ -8,10 +8,6 @@ class SidepanelWidget(tk.Frame):
         master (widget): Container of Sidepanel widget.
         grid_index (tuple): (row, column) Position on grid.
     
-    Attributes:
-        row (int): Latest grid row of sidepanel subcomponent.
-        components (Dict[str, widget]): Dict of subcomponents in the sidepanel.
-    
     """
 
     def __init__(self, master:tk.Widget, grid_index:tuple):

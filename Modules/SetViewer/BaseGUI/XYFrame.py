@@ -13,10 +13,6 @@ class RangeFrame(tk.Frame):
         grid_index (tuple): (int, int) Row and column position on the tkinter grid.
         text (str): Text of each minumum and maximum label.
     
-    Attributes:
-        min (labeledwidget): Widget container for minimum value in the specified range.
-        max (labeledwidget): Widget container for maximum value in the specified range.
-    
     """
     def __init__(self, master:tk.Widget, validate:Callable, grid_index:tuple, coord_range:tuple, text:str):
         super().__init__(master)
@@ -47,15 +43,8 @@ class XYFrame(tk.LabelFrame):
         master (tkinter.widget): The container of the XY frame.
         widget_params (dict[str, object]): Widget-specific arguments.
         minwidth (int): Minimum width of the XY frame.
-    
-    Attributes:
-        x_range (xyframe.rangeframe): The container widget for the x_min and x_max LabeledWidgets.
-        y_range (xyframe.rangeframe): The container widget for the y_min and y_max LabeledWidgets.
-        coord_range (coordinaterange): The validated coordinate range of the XY widgets.
-    
-    Widget Args:
-        coord_range (CoordinateRange): Full XY coordinate range.
-        validate (function): Keystroke validation function on each x&y component.
+        coord_range (CoordinateRange) (Widget Arg): Full XY coordinate range.
+        validate (function) (Widget Arg): Keystroke validation function on each x&y component.
     
     """
     def __init__(self, master:tk.Widget, widget_params:Dict[str, object], minwidth:int):

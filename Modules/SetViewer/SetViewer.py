@@ -29,7 +29,6 @@ class SetViewer(BaseGUI):
     
     Attributes:
         sets (dict[str, complexset]): Dictionary of complex set objects, key being the name of the set.
-        selected_set (complexset): The selected set to be generated.
         maintain_ratio (bool): Whether to attempt maintaining the aspect ratio when initialized.
         simulation (tkinter.widget): The simulation subcomponent in the sidepanel.
         picture (tkinter.widget): The picture subcomponent in the sidepanel.
