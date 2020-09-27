@@ -89,8 +89,7 @@ class SetViewer(BaseGUI):
                 self.canvas.update(self.selected_set.get_set()['divergence'], cmap=self.picture.colormaps.val)
                 self.update_progress()
             except StopIteration:
-                self.canvas.update(self.selected_set.get_set()['divergence'], cmap=self.picture.colormaps.val)
-                self.canvas.draw()
+                self.canvas.update(self.selected_set.get_set()['divergence'], cmap=self.picture.colormaps.val, redraw=True)
                 self.stop_generation()
                 self.simulation.generation.pause['state'] = 'disabled'
                 self.simulation.generation.toggle_pause(continue_=False)
@@ -164,7 +163,7 @@ class SetViewer(BaseGUI):
         maxIters = self.simulation.iterations.val
 
         if isinstance(coords, Exception):
-            tk.messagebox.showerror(title='Error', message=coords.message)
+            tk.messagebox.showerror(title='Error', message=coords)
             return coords
         
         selected_set.set_coord_range(coords)
