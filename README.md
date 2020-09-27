@@ -2,6 +2,9 @@
 
 This simulation uses Numpy to generate a 2D array of pixels mapped to points on the complex plane. These complex points are converted to RGB values where the color of each pixel states how far that complex number is in the recursive process of the selected set.
 
+## Docs
+https://roblaughlin.github.io/complex-set-simulator/
+
 ## Mandelbrot Set Recursive Definition
 The Mandelbrot Set is defined as the set of all complex numbers that converge as the number of recursions (n) approach infinity.
 
