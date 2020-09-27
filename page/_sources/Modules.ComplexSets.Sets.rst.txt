@@ -1,0 +1,29 @@
+Modules.ComplexSets.Sets package
+================================
+
+Submodules
+----------
+
+Modules.ComplexSets.Sets.Julia module
+-------------------------------------
+
+.. automodule:: Modules.ComplexSets.Sets.Julia
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.ComplexSets.Sets.Mandelbrot module
+------------------------------------------
+
+.. automodule:: Modules.ComplexSets.Sets.Mandelbrot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: Modules.ComplexSets.Sets
+   :members:
+   :undoc-members:
+   :show-inheritance:

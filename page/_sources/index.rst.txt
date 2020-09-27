@@ -1,0 +1,19 @@
+Modules package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   Modules.ComplexSets
+   Modules.SetViewer
+
+Module contents
+---------------
+
+.. automodule:: Modules
+   :members:
+   :undoc-members:
+   :show-inheritance:

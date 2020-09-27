@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modules.SetViewer package &#8212; Complex Set Simulator  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modules.SetViewer.BaseGUI package" href="Modules.SetViewer.BaseGUI.html" />
+    <link rel="prev" title="Modules.ComplexSets.Sets package" href="Modules.ComplexSets.Sets.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="modules-setviewer-package">
+<h1>Modules.SetViewer package<a class="headerlink" href="#modules-setviewer-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html">Modules.SetViewer.BaseGUI package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.BaseGUI">Modules.SetViewer.BaseGUI.BaseGUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.CanvasContainer">Modules.SetViewer.BaseGUI.CanvasContainer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.JuliaConstantWidget">Modules.SetViewer.BaseGUI.JuliaConstantWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.LabeledWidget">Modules.SetViewer.BaseGUI.LabeledWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.Picture">Modules.SetViewer.BaseGUI.Picture module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.Root">Modules.SetViewer.BaseGUI.Root module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.Sidepanel">Modules.SetViewer.BaseGUI.Sidepanel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.Simulation">Modules.SetViewer.BaseGUI.Simulation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI.XYFrame">Modules.SetViewer.BaseGUI.XYFrame module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html#module-Modules.SetViewer.BaseGUI">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Modules.SetViewer.SetViewer">
+<span id="modules-setviewer-setviewer-module"></span><h2>Modules.SetViewer.SetViewer module<a class="headerlink" href="#module-Modules.SetViewer.SetViewer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.SetViewer.SetViewer">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.SetViewer.</code><code class="sig-name descname">SetViewer</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Modules.SetViewer.BaseGUI.html#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI" title="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI</span></code></a></p>
+<p>GUI Controller/SetViewer for sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>setlist</strong> (<em>list</em>) – List of complex set objects.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the window.</p></li>
+<li><p><strong>colormap</strong> (<em>str</em>) – Default colormap to apply to the GUI figure.</p></li>
+<li><p><strong>iterations</strong> (<em>int</em>) – Max number of iterations to simulate.</p></li>
+<li><p><strong>dimensions</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – used to initialize respective width and height of the root widget.</p></li>
+<li><p><strong>max_interval_delay</strong> (<em>int</em>) – Max delay between frame animation.</p></li>
+<li><p><strong>julia_constant</strong> (<em>complex</em><em>) </em><em>(</em><em>real</em><em>, </em><em>imag</em>) – specific constant to use for simulating the Julia set.</p></li>
+<li><p><strong>maintain_ratio</strong> (<em>bool</em>) – Whether to attempt maintaining the aspect ratio when initialized.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.sets">
+<code class="sig-name descname">sets</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.sets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of complex set objects, key being the name of the set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict[str, complexset]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.maintain_ratio">
+<code class="sig-name descname">maintain_ratio</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.maintain_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to attempt maintaining the aspect ratio when initialized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.simulation">
+<code class="sig-name descname">simulation</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.simulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>The simulation subcomponent in the sidepanel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.widget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.picture">
+<code class="sig-name descname">picture</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.picture" title="Permalink to this definition">¶</a></dt>
+<dd><p>The picture subcomponent in the sidepanel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.widget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.xy_frame">
+<code class="sig-name descname">xy_frame</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.xy_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>The xy frame subcomponent in the sidepanel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.widget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.julia_constant">
+<code class="sig-name descname">julia_constant</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.julia_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Julia constant subcomponent in the sidepanel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.widget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.anim">
+<code class="sig-name descname">anim</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.anim" title="Permalink to this definition">¶</a></dt>
+<dd><p>The render function for the set generation animation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.after_id">
+<code class="sig-name descname">after_id</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.after_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The string ID to keep track of animation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.animation_checkbox_clicked">
+<code class="sig-name descname">animation_checkbox_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.animation_checkbox_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for when the animation checkbox has been ticked or unticked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – The animation checkbox container.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.canvas_onclick">
+<code class="sig-name descname">canvas_onclick</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.canvas_onclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for clicking the canvas. Current implementation is left click for zoom in and right click for zoom out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>widget</strong> (<em>tkinter.widget</em>) – The widget that was clicked (canvas).</p></li>
+<li><p><strong>event</strong> (<em>matplotlib.backend_bases.mouseevent</em>) – Event data regarding where on the canvas was clicked.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.color_map_changed">
+<code class="sig-name descname">color_map_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.color_map_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for when a different colormap has been selected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – The colormap container.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.continue_btn_clicked">
+<code class="sig-name descname">continue_btn_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Button</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.continue_btn_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for clicking the continue button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.button</em>) – The button that was clicked (continue button).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.generate">
+<code class="sig-name descname">generate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reset</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main initial generation function for generating complex sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reset</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to reset the progress already generated, ex: set to False if generation is paused.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If there was an error setting the coordinate range of the set.
+None: If generation succeeded.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>coordinaterange.exception</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.generate_btn_clicked">
+<code class="sig-name descname">generate_btn_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Button</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.generate_btn_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Onclick event for the generation button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.button</em>) – The generation button.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.imag_part_changed">
+<code class="sig-name descname">imag_part_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.imag_part_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for when the value of the imaginary part widget has been changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – The imaginary part container widget.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.pause_btn_clicked">
+<code class="sig-name descname">pause_btn_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Button</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.pause_btn_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for clicking the pause button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.button</em>) – The button that was clicked (pause button).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.real_part_changed">
+<code class="sig-name descname">real_part_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.real_part_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for when the value of the real part widget has been changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – The real part container widget.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.selected_set">
+<em class="property">property </em><code class="sig-name descname">selected_set</code><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.selected_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>The selected set to be generated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>selected_set (complexset)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the GUI.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.stop_generation">
+<code class="sig-name descname">stop_generation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">clear</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.stop_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the iterative generation of the current set being generated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>clear</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to clear the progress bar after stopping the generation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.SetViewer.SetViewer.update_progress">
+<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">clear</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.SetViewer.SetViewer.update_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the progress bar value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>clear</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to clear the progress bar after stopping the generation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Modules.SetViewer" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Complex Set Simulator</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Modules.ComplexSets.html">Modules.ComplexSets package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modules.SetViewer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Modules.SetViewer.BaseGUI.html">Modules.SetViewer.BaseGUI package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.SetViewer.SetViewer">Modules.SetViewer.SetViewer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.SetViewer">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Modules.ComplexSets.Sets.html" title="previous chapter">Modules.ComplexSets.Sets package</a></li>
+      <li>Next: <a href="Modules.SetViewer.BaseGUI.html" title="next chapter">Modules.SetViewer.BaseGUI package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Robert Laughlin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Modules.SetViewer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

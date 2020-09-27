@@ -1,0 +1,85 @@
+Modules.SetViewer.BaseGUI package
+=================================
+
+Submodules
+----------
+
+Modules.SetViewer.BaseGUI.BaseGUI module
+----------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.BaseGUI
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.SetViewer.BaseGUI.CanvasContainer module
+------------------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.CanvasContainer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.SetViewer.BaseGUI.JuliaConstantWidget module
+----------------------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.JuliaConstantWidget
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.SetViewer.BaseGUI.LabeledWidget module
+----------------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.LabeledWidget
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.SetViewer.BaseGUI.Picture module
+----------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.Picture
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.SetViewer.BaseGUI.Root module
+-------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.Root
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.SetViewer.BaseGUI.Sidepanel module
+------------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.Sidepanel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.SetViewer.BaseGUI.Simulation module
+-------------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.Simulation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.SetViewer.BaseGUI.XYFrame module
+----------------------------------------
+
+.. automodule:: Modules.SetViewer.BaseGUI.XYFrame
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: Modules.SetViewer.BaseGUI
+   :members:
+   :undoc-members:
+   :show-inheritance:

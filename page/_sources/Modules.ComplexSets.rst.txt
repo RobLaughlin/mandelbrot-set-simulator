@@ -1,0 +1,37 @@
+Modules.ComplexSets package
+===========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   Modules.ComplexSets.Sets
+
+Submodules
+----------
+
+Modules.ComplexSets.ComplexSet module
+-------------------------------------
+
+.. automodule:: Modules.ComplexSets.ComplexSet
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Modules.ComplexSets.CoordinateRange module
+------------------------------------------
+
+.. automodule:: Modules.ComplexSets.CoordinateRange
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: Modules.ComplexSets
+   :members:
+   :undoc-members:
+   :show-inheritance:

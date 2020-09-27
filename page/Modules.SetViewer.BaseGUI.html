@@ -1,0 +1,1238 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modules.SetViewer.BaseGUI package &#8212; Complex Set Simulator  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Modules.SetViewer package" href="Modules.SetViewer.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="modules-setviewer-basegui-package">
+<h1>Modules.SetViewer.BaseGUI package<a class="headerlink" href="#modules-setviewer-basegui-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.BaseGUI">
+<span id="modules-setviewer-basegui-basegui-module"></span><h2>Modules.SetViewer.BaseGUI.BaseGUI module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.BaseGUI" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.BaseGUI.</code><code class="sig-name descname">BaseGUI</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Initialize the base GUI for the set simulator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sets</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>ComplexSets</em><em>]</em>) – Mapping of set names to Complex Set objects.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the window.</p></li>
+<li><p><strong>colormap</strong> (<em>str</em>) – Default colormap to apply to the GUI figure.</p></li>
+<li><p><strong>iterations</strong> (<em>int</em>) – Max number of iterations to simulate.</p></li>
+<li><p><strong>dimensions</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – used to initialize the respective (width, height) of root widget.</p></li>
+<li><p><strong>max_interval_delay</strong> (<em>int</em>) – Max delay between frame animation.</p></li>
+<li><p><strong>julia_constant</strong> (<em>complex</em>) – (real, imag) specific constant to use for simulating the Julia set.</p></li>
+<li><p><strong>coord_range</strong> (<em>coordinaterange</em>) – the default coordinate range initialized in the GUI.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.GITHUB_URL">
+<code class="sig-name descname">GITHUB_URL</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.GITHUB_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>GitHub URI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.GITHUB_PNG">
+<code class="sig-name descname">GITHUB_PNG</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.GITHUB_PNG" title="Permalink to this definition">¶</a></dt>
+<dd><p>GitHub logo/icon path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.DEFAULT_PNG">
+<code class="sig-name descname">DEFAULT_PNG</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.DEFAULT_PNG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default image path to use for figure before set generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.SIMULATOR_ICON">
+<code class="sig-name descname">SIMULATOR_ICON</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.SIMULATOR_ICON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Icon path for GUI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.SAVE_DIRECTORY">
+<code class="sig-name descname">SAVE_DIRECTORY</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.SAVE_DIRECTORY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory path where images will be saved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.MIN_WIDTH">
+<code class="sig-name descname">MIN_WIDTH</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.MIN_WIDTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum width of the GUI in pixels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.MIN_HEIGHT">
+<code class="sig-name descname">MIN_HEIGHT</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.MIN_HEIGHT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum height of the GUI in pixels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.SIDEPANEL_WIDTH">
+<code class="sig-name descname">SIDEPANEL_WIDTH</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.SIDEPANEL_WIDTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Width of the GUI Sidepanel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.width">
+<code class="sig-name descname">width</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Width of the GUI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.height">
+<code class="sig-name descname">height</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height of the GUI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.figure">
+<code class="sig-name descname">figure</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Figure to display the generated sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.canvas">
+<code class="sig-name descname">canvas</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Canvas to connect matplotlib figure and tkinter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>matplotlib.backends.backend_tkagg.figurecanvastkagg</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.root">
+<code class="sig-name descname">root</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Top-level widget for GUI</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#Modules.SetViewer.BaseGUI.Root.RootWidget" title="Modules.SetViewer.BaseGUI.Root.RootWidget">RootWidget</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.sidepanel">
+<code class="sig-name descname">sidepanel</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.sidepanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main sidepanel container for most of the GUI controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget" title="Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget">SidepanelWidget</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#Modules.SetViewer.BaseGUI.BaseGUI.MinimumWidthExceeded" title="Modules.SetViewer.BaseGUI.BaseGUI.MinimumWidthExceeded"><strong>MinimumWidthExceeded</strong></a> – Minimum width of the GUI does not match the static minimum width.</p></li>
+<li><p><a class="reference internal" href="#Modules.SetViewer.BaseGUI.BaseGUI.MinimumHeightExceeded" title="Modules.SetViewer.BaseGUI.BaseGUI.MinimumHeightExceeded"><strong>MinimumHeightExceeded</strong></a> – Minimum height of the GUI does not match the static minimum height.</p></li>
+<li><p><a class="reference internal" href="#Modules.SetViewer.BaseGUI.BaseGUI.ColorMapNotIncluded" title="Modules.SetViewer.BaseGUI.BaseGUI.ColorMapNotIncluded"><strong>ColorMapNotIncluded</strong></a> – Color map is not included in the color maps provided by Matplotlib.</p></li>
+<li><p><strong>FileNotFoundError</strong> – Static images/files were not found in the img/ filepath.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="id0">
+<code class="sig-name descname">DEFAULT_PNG</code><em class="property"> = 'img/nullset.png'</em><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="id1">
+<code class="sig-name descname">GITHUB_PNG</code><em class="property"> = 'img/github.png'</em><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="id2">
+<code class="sig-name descname">GITHUB_URL</code><em class="property"> = 'https://github.com/RobLaughlin/complex-set-simulator'</em><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="id3">
+<code class="sig-name descname">MIN_HEIGHT</code><em class="property"> = 650</em><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="id4">
+<code class="sig-name descname">MIN_WIDTH</code><em class="property"> = 650</em><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="id5">
+<code class="sig-name descname">SAVE_DIRECTORY</code><em class="property"> = 'images'</em><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="id6">
+<code class="sig-name descname">SIDEPANEL_WIDTH</code><em class="property"> = 250</em><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="id7">
+<code class="sig-name descname">SIMULATOR_ICON</code><em class="property"> = 'img/mset.ico'</em><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.animation_checkbox_clicked">
+<em class="property">abstract classmethod </em><code class="sig-name descname">animation_checkbox_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.animation_checkbox_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for animation checkbox onclick. Overridden by implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – Widget container of what component triggered the event.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.canvas_onclick">
+<em class="property">abstract classmethod </em><code class="sig-name descname">canvas_onclick</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.canvas_onclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for the canvas onclick. Overridden by implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>widget</strong> (<em>tkinter.widget</em>) – Widget container of what component triggered the event.</p></li>
+<li><p><strong>event</strong> (<em>matplotlib.backend_bases.mouseevent</em>) – Event data regarding where on the canvas was clicked.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.color_map_changed">
+<em class="property">abstract classmethod </em><code class="sig-name descname">color_map_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.color_map_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for selected colormap change. Overridden by implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – Widget container of what component triggered the event.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.continue_btn_clicked">
+<em class="property">abstract classmethod </em><code class="sig-name descname">continue_btn_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Button</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.continue_btn_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for continue button onclick. Overridden by implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.button</em>) – The button that triggered the onclick event.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.generate_btn_clicked">
+<em class="property">abstract classmethod </em><code class="sig-name descname">generate_btn_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Button</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.generate_btn_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for the generation button onclick. Overridden by implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.button</em>) – The generation button.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.imag_part_changed">
+<em class="property">abstract classmethod </em><code class="sig-name descname">imag_part_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.imag_part_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for the real part widget change. Overridden by implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – Widget container of what component triggered the event.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.pause_btn_clicked">
+<em class="property">abstract classmethod </em><code class="sig-name descname">pause_btn_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.pause_btn_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for pause button onclick. Overridden by implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – Widget container of what component triggered the event.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.range_entry_handler">
+<code class="sig-name descname">range_entry_handler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">entry</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.range_entry_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validation function for each keystroke of a XY range entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – What specific key was entered into the XY field.</p></li>
+<li><p><strong>entry</strong> (<em>str</em>) – The full entry value of the XY field.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if validation succeeds, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.real_part_changed">
+<em class="property">abstract classmethod </em><code class="sig-name descname">real_part_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.real_part_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for the real part widget change. Overridden by implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – Widget container of what component triggered the event.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.save_btn_clicked">
+<code class="sig-name descname">save_btn_clicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Button</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.save_btn_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for save button click.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.button</em>) – The save button.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.set_list_changed">
+<code class="sig-name descname">set_list_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.BaseGUI.set_list_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for when a different set is selected from the set list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>tkinter.widget</em>) – The set list container widget.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.ColorMapNotIncluded">
+<em class="property">exception </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.BaseGUI.</code><code class="sig-name descname">ColorMapNotIncluded</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.ColorMapNotIncluded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Color map is not included in the color maps provided by Matplotlib.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.MinimumHeightExceeded">
+<em class="property">exception </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.BaseGUI.</code><code class="sig-name descname">MinimumHeightExceeded</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.MinimumHeightExceeded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Minimum height of the GUI does not match the static minimum height.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="Modules.SetViewer.BaseGUI.BaseGUI.MinimumWidthExceeded">
+<em class="property">exception </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.BaseGUI.</code><code class="sig-name descname">MinimumWidthExceeded</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.BaseGUI.MinimumWidthExceeded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Minimum width of the GUI does not match the static minimum width.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.CanvasContainer">
+<span id="modules-setviewer-basegui-canvascontainer-module"></span><h2>Modules.SetViewer.BaseGUI.CanvasContainer module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.CanvasContainer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.CanvasContainer.Canvas">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.CanvasContainer.</code><code class="sig-name descname">Canvas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">size</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">fpath</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.CanvasContainer.Canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.backends.backend_tkagg.FigureCanvasTkAgg</span></code></p>
+<p>Main canvas for viewing the complex set generation/image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – Parent container of the canvas.</p></li>
+<li><p><strong>handler</strong> (<em>function</em><em>(</em><em>widget</em><em>, </em><em>event</em><em>)</em>) – The event handler for the canvas click event.</p></li>
+<li><p><strong>size</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – Width and height of the canvas, respectively.</p></li>
+<li><p><strong>fpath</strong> (<em>str</em>) – File path of the default image to load onto the canvas.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em><em>, </em><em>optional</em>) – DPI of the figure, default is 100.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.figure">
+<em class="property">property </em><code class="sig-name descname">figure</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Figure of the canvas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.height">
+<em class="property">property </em><code class="sig-name descname">height</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height of the canvas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.load_default_figure">
+<code class="sig-name descname">load_default_figure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fpath</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.load_default_figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the default image into figure when the GUI loads.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fpath</strong> (<em>str</em>) – File path of the default image to load onto the canvas.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the default image to load is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">img: &lt;module 'PIL.Image' from 'c:\\python38\\lib\\site-packages\\PIL\\Image.py'&gt;</em>, <em class="sig-param">cmap='gray'</em>, <em class="sig-param">origin='lower'</em>, <em class="sig-param">redraw=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the canvas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>pil.image</em>) – Image to update the canvas with.</p></li>
+<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – Colormap to apply to the figure.</p></li>
+<li><p><strong>origin</strong> (<em>str</em><em>, </em><em>optional</em>) – Origin of figure.</p></li>
+<li><p><strong>redraw</strong> (<em>bool</em>) – Redraw the canvas.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.width">
+<em class="property">property </em><code class="sig-name descname">width</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.CanvasContainer.Canvas.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Width of the canvas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.JuliaConstantWidget">
+<span id="modules-setviewer-basegui-juliaconstantwidget-module"></span><h2>Modules.SetViewer.BaseGUI.JuliaConstantWidget module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.JuliaConstantWidget" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaComplexPart">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.JuliaConstantWidget.</code><code class="sig-name descname">JuliaComplexPart</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">const_range</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">default_value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaComplexPart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget" title="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget</span></code></a></p>
+<p>The real or imaginary part widgets for the Julia constant widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – Container of the real/imaginary part widgets.</p></li>
+<li><p><strong>const_range</strong> (<em>tuple</em><em>) </em><em>(</em><em>float</em><em>, </em><em>float</em>) – (Minimum, Maximum) for the part range, respecitvely.</p></li>
+<li><p><strong>handler</strong> (<em>function</em><em>(</em><a class="reference internal" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaComplexPart" title="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaComplexPart"><em>JuliaComplexPart</em></a><em>)</em>) – Event handler for when the part widget is changed.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – Location (Row, Col) on the tkinter grid system.</p></li>
+<li><p><strong>default_value</strong> (<em>int</em>) – The default value of the part widget.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.JuliaConstantWidget.</code><code class="sig-name descname">JuliaConstantWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">widget_params</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>object<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">minwidth</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.LabelFrame</span></code></p>
+<p>The container widget for the complex constant used in generating the Julia set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – Container of the Julia set constant widget.</p></li>
+<li><p><strong>widget_params</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>object</em><em>]</em>) – Widget-specific configuration.</p></li>
+<li><p><strong>minwidth</strong> (<em>int</em>) – The minimum width if the Julia constant widget.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – The respective (row, column) position on the tkinter grid.</p></li>
+<li><p><strong>real_handler</strong> (<em>function</em><em>(</em><a class="reference internal" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaComplexPart" title="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaComplexPart"><em>JuliaComplexPart</em></a><em>)</em><em>) </em><em>(</em><em>Widget Arg</em>) – Event handler for when the real part widget is changed.</p></li>
+<li><p><strong>real_range</strong> (<em>tuple</em><em>) </em><em>(</em><em>float</em><em>, </em><em>float</em><em>) </em><em>(</em><em>Widget Arg</em>) – Respective minimum and maximum for the real range.</p></li>
+<li><p><strong>imag_handler</strong> (<em>function</em><em>(</em><a class="reference internal" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaComplexPart" title="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaComplexPart"><em>JuliaComplexPart</em></a><em>)</em><em>) </em><em>(</em><em>Widget Arg</em>) – Event handler for when the imaginary part widget is changed.</p></li>
+<li><p><strong>imag_range</strong> (<em>tuple</em><em>) </em><em>(</em><em>float</em><em>, </em><em>float</em><em>) </em><em>(</em><em>Widget Arg</em>) – Respective minimum and maximum for the imaginary range.</p></li>
+<li><p><strong>default_value</strong> (<em>complex</em><em>) </em><em>(</em><em>Widget Arg</em>) – Complex number to use as the default selected constant for the Julia set widget.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget.hide">
+<code class="sig-name descname">hide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide the widget.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget.imag">
+<em class="property">property </em><code class="sig-name descname">imag</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget.imag" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the imaginary_part componen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget.real">
+<em class="property">property </em><code class="sig-name descname">real</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget.real" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the real_part component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.JuliaConstantWidget.JuliaConstantWidget.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.LabeledWidget">
+<span id="modules-setviewer-basegui-labeledwidget-module"></span><h2>Modules.SetViewer.BaseGUI.LabeledWidget module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.LabeledWidget" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.LabeledWidget.</code><code class="sig-name descname">LabeledWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Frame</span></code></p>
+<p>Wrapper frame for widgets that have a label and widget side by side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – The LabelWidget’s container.</p></li>
+<li><p><strong>widget</strong> (<em>tuple</em><em>) </em><em>(</em><em>widget</em><em>, </em><em>options</em>) – The tuple consisting of the widget (tkinter.XX) and its specified options (dict).</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – Text of the label.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – Location (Row, Col) on the tkinter grid system.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget.label">
+<em class="property">property </em><code class="sig-name descname">label</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label of the component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tk.label</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget.text">
+<em class="property">property </em><code class="sig-name descname">text</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label text of the component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget.val">
+<em class="property">property </em><code class="sig-name descname">val</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget.val" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value of the component widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget.widget">
+<em class="property">property </em><code class="sig-name descname">widget</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget.widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>The widget of the component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.widget</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.Picture">
+<span id="modules-setviewer-basegui-picture-module"></span><h2>Modules.SetViewer.BaseGUI.Picture module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.Picture" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Picture.AnimationCheckbox">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Picture.</code><code class="sig-name descname">AnimationCheckbox</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">checked_default</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Picture.AnimationCheckbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Checkbutton</span></code></p>
+<p>Animation checkbox subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – Animation checkbox container widget.</p></li>
+<li><p><strong>handler</strong> (<em>function</em><em>(</em><em>widget</em><em>)</em>) – Event handler for checkbox click.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – (Row, Col) position on the tkinter grid.</p></li>
+<li><p><strong>checked_default</strong> (<em>bool</em>) – Whether to initially check the animation checkbox.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Picture.AnimationCheckbox.val">
+<em class="property">property </em><code class="sig-name descname">val</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Picture.AnimationCheckbox.val" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of animation checkbox.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.booleanvar</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Picture.ColormapWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Picture.</code><code class="sig-name descname">ColormapWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">colormaps</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">default_value</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Picture.ColormapWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget" title="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget</span></code></a></p>
+<p>Colormap subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – Colormap container widget.</p></li>
+<li><p><strong>handler</strong> (<em>function</em><em>(</em><em>widget</em><em>)</em>) – Event handler for widget selection</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – (Row, Col) position on the tkinter grid.</p></li>
+<li><p><strong>colormaps</strong> (<em>list</em>) – List of available Matplotlib colormaps.</p></li>
+<li><p><strong>default_value</strong> (<em>str</em>) – Default colormap.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Picture.PictureWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Picture.</code><code class="sig-name descname">PictureWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">widget_params</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>object<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">minwidth</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Picture.PictureWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.LabelFrame</span></code></p>
+<p>Picture (GUI) frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – Container widget for picture frame.</p></li>
+<li><p><strong>widget_params</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>object</em><em>]</em>) – widget-specific options.</p></li>
+<li><p><strong>minwidth</strong> (<em>int</em>) – Minimum width of picture frame.</p></li>
+<li><p><strong>colormaps</strong> (<em>list</em><em>) </em><em>(</em><em>Widget Arg</em>) – List of available Matplotlib color maps.</p></li>
+<li><p><strong>default_colormap</strong> (<em>str</em><em>) </em><em>(</em><em>Widget Arg</em>) – Default color map to select on load.</p></li>
+<li><p><strong>colormap_changed</strong> (<em>function</em><em>(</em><em>widget</em><em>)</em><em>) </em><em>(</em><em>Widget Arg</em>) – Event handler for colormap changing selection.</p></li>
+<li><p><strong>anim_btn_clicked</strong> (<em>function</em><em>(</em><em>widget</em><em>)</em><em>) </em><em>(</em><em>Widget Arg</em>) – Event handler for clicking the animation button.</p></li>
+<li><p><strong>save_btn_clicked</strong> (<em>function</em><em>(</em><em>widget</em><em>)</em><em>) </em><em>(</em><em>Widget Arg</em>) – Event handler for clicking the save button.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Picture.PictureWidget.animation">
+<em class="property">property </em><code class="sig-name descname">animation</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Picture.PictureWidget.animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Animation checkbox.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>picture.animationcheckbox</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Picture.PictureWidget.colormaps">
+<em class="property">property </em><code class="sig-name descname">colormaps</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Picture.PictureWidget.colormaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Available Matplotlib color maps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>picture.colormapwidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Picture.PictureWidget.save_button">
+<em class="property">property </em><code class="sig-name descname">save_button</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Picture.PictureWidget.save_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save image button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.button</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.Root">
+<span id="modules-setviewer-basegui-root-module"></span><h2>Modules.SetViewer.BaseGUI.Root module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.Root" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Root.RootWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Root.</code><code class="sig-name descname">RootWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">minwidth</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Root.RootWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Tk</span></code></p>
+<p>Root widget for complex set viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em>) – Title of the root window.</p></li>
+<li><p><strong>dimensions</strong> (<em>tuple</em><em>) </em><em>(</em><em>int</em><em>, </em><em>int</em>) – The (width, height) of the root widget.</p></li>
+<li><p><strong>minwidth</strong> (<em>int</em>) – The minimum width of the root widget.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Root.RootWidget.dimensions">
+<em class="property">property </em><code class="sig-name descname">dimensions</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Root.RootWidget.dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>(width, height) Size dimensions of root widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Root.RootWidget.icon">
+<em class="property">property </em><code class="sig-name descname">icon</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Root.RootWidget.icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Icon filepath of root widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Root.RootWidget.title">
+<em class="property">property </em><code class="sig-name descname">title</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Root.RootWidget.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title of the root widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.Sidepanel">
+<span id="modules-setviewer-basegui-sidepanel-module"></span><h2>Modules.SetViewer.BaseGUI.Sidepanel module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.Sidepanel" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Sidepanel.</code><code class="sig-name descname">SidepanelWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Frame</span></code></p>
+<p>Sidepanel container for complex set viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>widget</em>) – Container of Sidepanel widget.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em>) – (row, column) Position on grid.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget.add_component">
+<code class="sig-name descname">add_component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">component</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget.add_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add subcomponent to the sidepanel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component</strong> (<em>widget</em>) – The component to add to the sidepanel</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Identifier of specified subcomponent</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget.components">
+<em class="property">property </em><code class="sig-name descname">components</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget.components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dict of subcomponents in sidepanel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[str, widget]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget.row">
+<em class="property">property </em><code class="sig-name descname">row</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Sidepanel.SidepanelWidget.row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Row of subcomponent in Sidepanel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.Simulation">
+<span id="modules-setviewer-basegui-simulation-module"></span><h2>Modules.SetViewer.BaseGUI.Simulation module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.Simulation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.AnimationDelayWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Simulation.</code><code class="sig-name descname">AnimationDelayWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">max_animation_delay</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">default_value</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.AnimationDelayWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget" title="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget</span></code></a></p>
+<p>Animation delay subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – The animation delay component’s container.</p></li>
+<li><p><strong>max_animation_delay</strong> (<em>int</em>) – Maximum delay (MS) between franes.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em>) – (int, int) Location on the tkinter grid system.</p></li>
+<li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default value on the delay scale.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.GenerationControlWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Simulation.</code><code class="sig-name descname">GenerationControlWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">generate_handler</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">pause_handler</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">continue_handler</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.GenerationControlWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Frame</span></code></p>
+<p>Generation control frame subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – The generation control component’s container.</p></li>
+<li><p><strong>generate_handler</strong> (<em>function</em><em>(</em><em>button</em><em>)</em>) – Event handler for generate button click.</p></li>
+<li><p><strong>pause_handler</strong> (<em>function</em><em>(</em><em>button</em><em>)</em>) – Event handler for pause button click.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em>) – (int, int) Location on the tkinter grid system.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.GenerationControlWidget.generate">
+<em class="property">property </em><code class="sig-name descname">generate</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.GenerationControlWidget.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate button</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.button</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.GenerationControlWidget.pause">
+<em class="property">property </em><code class="sig-name descname">pause</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.GenerationControlWidget.pause" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pause button</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.button</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.GenerationControlWidget.toggle_pause">
+<code class="sig-name descname">toggle_pause</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">continue_</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.GenerationControlWidget.toggle_pause" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggles the pause and continue states for the pause button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>continue</strong> (<em>bool</em>) – Whether to set the pause button to the continue state or the pause state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.IterationWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Simulation.</code><code class="sig-name descname">IterationWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">max_iterations</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">default_value</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.IterationWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget" title="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget</span></code></a></p>
+<p>Iteration subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – The iteration component’s container.</p></li>
+<li><p><strong>max_iterations</strong> (<em>int</em>) – Maximum iterations for complex set calculations.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em>) – (int, int) Location on the tkinter grid system.</p></li>
+<li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default value on the iteration scale.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.IterationWidget.max_iterations">
+<em class="property">property </em><code class="sig-name descname">max_iterations</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.IterationWidget.max_iterations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum iterations for complex set calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.SetListWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Simulation.</code><code class="sig-name descname">SetListWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">setlist</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">default_value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.SetListWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget" title="Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modules.SetViewer.BaseGUI.LabeledWidget.LabeledWidget</span></code></a></p>
+<p>Set list subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – The set list component’s container.</p></li>
+<li><p><strong>handler</strong> (<em>function</em><em>(</em><em>widget</em><em>)</em>) – Event handler for selecting a different set.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em>) – (int, int) Location on the tkinter grid system.</p></li>
+<li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default set</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.SimulationWidget">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.Simulation.</code><code class="sig-name descname">SimulationWidget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">widget_params</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>object<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">minwidth</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.SimulationWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.LabelFrame</span></code></p>
+<p>Simulation frame subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – The simulation frame’s container.</p></li>
+<li><p><strong>widget_params</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>object</em><em>]</em>) – widget-specific options</p></li>
+<li><p><strong>minwidth</strong> (<em>int</em>) – Minimum width of simulation frame.</p></li>
+<li><p><strong>max_iterations</strong> (<em>int</em><em>) </em><em>(</em><em>Widget Arg</em>) – Maximum iterations for complex set calculations.</p></li>
+<li><p><strong>max_delay</strong> (<em>int</em><em>) </em><em>(</em><em>Widget Arg</em>) – Maximum animation delay between rendering frames.</p></li>
+<li><p><strong>setlist</strong> (<em>simulation.setlistwidget</em><em>) </em><em>(</em><em>Widget Arg</em>) – Complex set widget container.</p></li>
+<li><p><strong>setlist_changed</strong> (<em>function</em><em>(</em><em>widget</em><em>)</em><em>) </em><em>(</em><em>Widget Arg</em>) – Event handler for changing the set list.</p></li>
+<li><p><strong>generate_btn_clicked</strong> (<em>function</em><em>(</em><em>button</em><em>)</em><em>) </em><em>(</em><em>Widget Arg</em>) – Event handler for clicking the generate button.</p></li>
+<li><p><strong>pause_btn_clicked</strong> (<em>function</em><em>(</em><em>button</em><em>)</em><em>) </em><em>(</em><em>Widget Arg</em>) – Event handler for clicking the pause button.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.delay">
+<em class="property">property </em><code class="sig-name descname">delay</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Animation delay subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>simulation.animationdelaywidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.generation">
+<em class="property">property </em><code class="sig-name descname">generation</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generation control container subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>simulation.generationcontrolwidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.iterations">
+<em class="property">property </em><code class="sig-name descname">iterations</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.iterations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iteration subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>simulation.iterationwidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.progress_bar">
+<em class="property">property </em><code class="sig-name descname">progress_bar</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.progress_bar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set generation progress bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkinter.ttk.progressbar</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.setlist">
+<em class="property">property </em><code class="sig-name descname">setlist</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.Simulation.SimulationWidget.setlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Animation delay subcomponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>simulation.animationdelaywidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI.XYFrame">
+<span id="modules-setviewer-basegui-xyframe-module"></span><h2>Modules.SetViewer.BaseGUI.XYFrame module<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI.XYFrame" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.XYFrame.RangeFrame">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.XYFrame.</code><code class="sig-name descname">RangeFrame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">validate</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">grid_index</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">coord_range</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.XYFrame.RangeFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Frame</span></code></p>
+<p>Coordinate Range container between a minimum and maximum value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – The container of the range frame.</p></li>
+<li><p><strong>validate</strong> (<em>function</em><em>(</em><em>key</em><em>, </em><em>entry</em><em>)</em>) – Validation event when a key is entered.</p></li>
+<li><p><strong>grid_index</strong> (<em>tuple</em>) – (int, int) Row and column position on the tkinter grid.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – Text of each minumum and maximum label.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.XYFrame.RangeFrame.max">
+<em class="property">property </em><code class="sig-name descname">max</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.XYFrame.RangeFrame.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum value in range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>“labeledwidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.XYFrame.RangeFrame.min">
+<em class="property">property </em><code class="sig-name descname">min</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.XYFrame.RangeFrame.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum value in range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>labeledwidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="Modules.SetViewer.BaseGUI.XYFrame.XYFrame">
+<em class="property">class </em><code class="sig-prename descclassname">Modules.SetViewer.BaseGUI.XYFrame.</code><code class="sig-name descname">XYFrame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master</span><span class="p">:</span> <span class="n">tkinter.Widget</span></em>, <em class="sig-param"><span class="n">widget_params</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>object<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">minwidth</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.XYFrame.XYFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.LabelFrame</span></code></p>
+<p>XY Coordinate range frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter.widget</em>) – The container of the XY frame.</p></li>
+<li><p><strong>widget_params</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>object</em><em>]</em>) – Widget-specific arguments.</p></li>
+<li><p><strong>minwidth</strong> (<em>int</em>) – Minimum width of the XY frame.</p></li>
+<li><p><strong>coord_range</strong> (<a class="reference internal" href="Modules.ComplexSets.html#Modules.ComplexSets.CoordinateRange.CoordinateRange" title="Modules.ComplexSets.CoordinateRange.CoordinateRange"><em>CoordinateRange</em></a><em>) </em><em>(</em><em>Widget Arg</em>) – Full XY coordinate range.</p></li>
+<li><p><strong>validate</strong> (<em>function</em><em>) </em><em>(</em><em>Widget Arg</em>) – Keystroke validation function on each x&amp;y component.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.XYFrame.XYFrame.coord_range">
+<em class="property">property </em><code class="sig-name descname">coord_range</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.XYFrame.XYFrame.coord_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a XY CoordinateRange if both the X and Y ranges are valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The validated coordinate object of the XY range.
+coordinaterange.invalidcoordinatebounds: If the validation of range(s) fails.
+ValueError: If the characters typed in the XY range fields are not valid floats.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>coordinaterange</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.XYFrame.XYFrame.update_all">
+<code class="sig-name descname">update_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">coord_range</span><span class="p">:</span> <span class="n"><a class="reference internal" href="Modules.ComplexSets.html#Modules.ComplexSets.CoordinateRange.CoordinateRange" title="Modules.ComplexSets.CoordinateRange.CoordinateRange">Modules.ComplexSets.CoordinateRange.CoordinateRange</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Modules.SetViewer.BaseGUI.XYFrame.XYFrame.update_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.XYFrame.XYFrame.x_range">
+<em class="property">property </em><code class="sig-name descname">x_range</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.XYFrame.XYFrame.x_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>X min/max coordinate range subcomponent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Modules.SetViewer.BaseGUI.XYFrame.XYFrame.y_range">
+<em class="property">property </em><code class="sig-name descname">y_range</code><a class="headerlink" href="#Modules.SetViewer.BaseGUI.XYFrame.XYFrame.y_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Y min/max coordinate range subcomponent.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Modules.SetViewer.BaseGUI">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Modules.SetViewer.BaseGUI" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Complex Set Simulator</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Modules.ComplexSets.html">Modules.ComplexSets package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Modules.SetViewer.html">Modules.SetViewer package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="Modules.SetViewer.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Modules.SetViewer.BaseGUI package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.BaseGUI">Modules.SetViewer.BaseGUI.BaseGUI module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.CanvasContainer">Modules.SetViewer.BaseGUI.CanvasContainer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.JuliaConstantWidget">Modules.SetViewer.BaseGUI.JuliaConstantWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.LabeledWidget">Modules.SetViewer.BaseGUI.LabeledWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.Picture">Modules.SetViewer.BaseGUI.Picture module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.Root">Modules.SetViewer.BaseGUI.Root module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.Sidepanel">Modules.SetViewer.BaseGUI.Sidepanel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.Simulation">Modules.SetViewer.BaseGUI.Simulation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI.XYFrame">Modules.SetViewer.BaseGUI.XYFrame module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Modules.SetViewer.BaseGUI">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.html#module-Modules.SetViewer.SetViewer">Modules.SetViewer.SetViewer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.SetViewer.html#module-Modules.SetViewer">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="Modules.SetViewer.html">Modules.SetViewer package</a><ul>
+      <li>Previous: <a href="Modules.SetViewer.html" title="previous chapter">Modules.SetViewer package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Robert Laughlin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Modules.SetViewer.BaseGUI.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,29 @@
+Modules.SetViewer package
+=========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   Modules.SetViewer.BaseGUI
+
+Submodules
+----------
+
+Modules.SetViewer.SetViewer module
+----------------------------------
+
+.. automodule:: Modules.SetViewer.SetViewer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: Modules.SetViewer
+   :members:
+   :undoc-members:
+   :show-inheritance:
