@@ -33,8 +33,8 @@ def init():
         
         julia_constant = set_template['julia_constant']['real'] + set_template['julia_constant']['imag'] * 1j
         crange = CoordinateRange(xmin, xmax, ymin, ymax)
-        mset = Mandelbrot(iterations=max_iterations, coord_range=crange)
-        jset = Julia(iterations=max_iterations, coord_range=crange, constant=julia_constant)
+        mset = Mandelbrot(iterations=max_iterations, coord_range=crange, xy_vals=(width, height))
+        jset = Julia(iterations=max_iterations, coord_range=crange, constant=julia_constant, xy_vals=(width, height))
         sets = [mset, jset]
 
         viewer = SetViewer(setlist=sets, title=title, colormap=colormap, iterations=max_iterations, julia_constant=julia_constant, 

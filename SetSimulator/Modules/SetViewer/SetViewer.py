@@ -58,24 +58,23 @@ class SetViewer(BaseGUI):
 
         for s in setlist:
             if s.name not in sets:
-                if s.get_template() is None:
+                if s.template is None:
                     s.generate_template(dimensions[0], dimensions[1])
 
                 sets[s.name] = s
         
         self.sets = sets
-        self.selected_set = iter(copy.deepcopy(setlist[0]))
+        self.selected_set = setlist[0]
     
     def __generate(self):
         """Complex set generation helper function."""
         try:
-            delay = self.simulation.delay.val
             next(self.selected_set)
             self.update_progress()
             self.after_id = self.root.after(self.simulation.delay.val, self.__generate)
         except StopIteration:
             self.stop_generation()
-            self.canvas.update(self.selected_set.get_set()['divergence'], cmap=self.picture.colormaps.val, redraw=True)
+            self.canvas.update(self.selected_set.data['divergence'], cmap=self.picture.colormaps.val, redraw=True)
             self.simulation.generation.pause['state'] = 'disabled'
             self.simulation.generation.toggle_pause(continue_=False)
 
@@ -83,13 +82,13 @@ class SetViewer(BaseGUI):
         """Callback for every frame in animation."""
         if self.picture.animation.val:
             self.anim.event_source.interval = self.simulation.delay.val
-
+            
             try:
                 next(self.selected_set)
-                self.canvas.update(self.selected_set.get_set()['divergence'], cmap=self.picture.colormaps.val)
+                self.canvas.update(self.selected_set.data['divergence'], cmap=self.picture.colormaps.val)
                 self.update_progress()
             except StopIteration:
-                self.canvas.update(self.selected_set.get_set()['divergence'], cmap=self.picture.colormaps.val, redraw=True)
+                self.canvas.update(self.selected_set.data['divergence'], cmap=self.picture.colormaps.val, redraw=True)
                 self.stop_generation()
                 self.simulation.generation.pause['state'] = 'disabled'
                 self.simulation.generation.toggle_pause(continue_=False)
@@ -99,10 +98,11 @@ class SetViewer(BaseGUI):
     def __init__(self, **kwargs):
         self.__init_sets(kwargs['setlist'], kwargs['dimensions'])
 
-        kwargs['coord_range'] = self.selected_set.get_coord_range()
+        kwargs['coord_range'] = self.selected_set.coord_range
         kwargs['sets'] = self.sets
         super().__init__(**kwargs)
 
+        self._selected_set = None
         self.simulation = self.sidepanel.components['simulation']
         self.picture = self.sidepanel.components['picture']
         self.xy_frame = self.sidepanel.components['xy_range']
@@ -112,6 +112,15 @@ class SetViewer(BaseGUI):
         self.anim = None
         self.after_id = None
 
+    @property
+    def selected_set(self) -> Set:
+        """selected_set (complexset): The selected set to be generated."""
+        return self._selected_set
+    
+    @selected_set.setter
+    def selected_set(self, set_:Set):
+        self._selected_set = iter(copy.deepcopy(set_))
+    
     def stop_generation(self, clear=True):
         """Stop the iterative generation of the current set being generated.
         
@@ -139,7 +148,7 @@ class SetViewer(BaseGUI):
         if clear:
             self.simulation.progress_bar['value'] = 0
         else:
-            self.simulation.progress_bar['value'] = (self.selected_set.get_current_iteration() / self.selected_set.get_iterations()) * 100
+            self.simulation.progress_bar['value'] = (self.selected_set.iteration / self.selected_set.max_iterations) * 100
 
         self.root.update_idletasks()
             
@@ -166,12 +175,12 @@ class SetViewer(BaseGUI):
             tk.messagebox.showerror(title='Error', message=coords)
             return coords
         
-        selected_set.set_coord_range(coords)
-        selected_set.set_iterations(maxIters)
+        selected_set.coord_range = coords
+        selected_set.max_iterations = maxIters
         
         if reset:
             new_set = copy.deepcopy(selected_set)
-            self.selected_set = iter(new_set)
+            self.selected_set = new_set
         
         # Check for animation enabled
         if self.picture.animation.val:
@@ -205,8 +214,9 @@ class SetViewer(BaseGUI):
             m = 3
         
         # Some zoom math
-        x_range = self.selected_set.get_coord_range().get_xRange()
-        y_range = self.selected_set.get_coord_range().get_yRange()
+        x_range = self.selected_set.coord_range.get_xRange()
+        y_range = self.selected_set.coord_range.get_yRange()
+        
         x_len = abs(x_range[1] - x_range[0])
         y_len = abs(y_range[1] - y_range[0])
         rel_x = x_range[0] + (x_len) * (event.x / self.canvas.width)
@@ -233,11 +243,11 @@ class SetViewer(BaseGUI):
             widget (tkinter.button): The button that was clicked (pause button).
         
         """
-        clear = (self.selected_set.get_current_iteration() >= self.selected_set.get_iterations())
+        clear = (self.selected_set.iteration >= self.selected_set.max_iterations)
 
         self.stop_generation(clear=clear)
         self.simulation.generation.toggle_pause(continue_=True)
-        self.canvas.update(self.selected_set.get_set()['divergence'], cmap=self.picture.colormaps.val)
+        self.canvas.update(self.selected_set.data['divergence'], cmap=self.picture.colormaps.val)
         
         if not self.picture.animation.val:
             self.canvas.draw()
@@ -258,8 +268,8 @@ class SetViewer(BaseGUI):
             widget (tkinter.widget): The colormap container.
         
         """
-        if self.selected_set.get_set() is not None:
-            self.canvas.update(self.selected_set.get_set()['divergence'], cmap=widget.val, redraw=True)
+        if self.selected_set.data is not None:
+            self.canvas.update(self.selected_set.data['divergence'], cmap=widget.val, redraw=True)
 
     def animation_checkbox_clicked(self, widget:tk.Widget):
         """Handler for when the animation checkbox has been ticked or unticked.
@@ -280,9 +290,8 @@ class SetViewer(BaseGUI):
         
         """
         selected_set = self.sets[self.simulation.setlist.val]
-        real_val = self.julia_constant.real
         if selected_set.name == 'Julia':
-            selected_set.update_constant(real_val + (selected_set.get_constant().imag * 1j))
+            selected_set.constant = self.julia_constant.real + (selected_set.constant.imag * 1j)
             self.generate()
         
     def imag_part_changed(self, widget:tk.Widget):
@@ -293,9 +302,8 @@ class SetViewer(BaseGUI):
         
         """
         selected_set = self.sets[self.simulation.setlist.val]
-        imag_val = self.julia_constant.imag
         if selected_set.name == 'Julia':
-            selected_set.update_constant(selected_set.get_constant().real + (imag_val * 1j))
+            selected_set.constant = selected_set.constant.real + (self.julia_constant.imag * 1j)
             self.generate()
 
     def generate_btn_clicked(self, widget:tk.Button):
